@@ -18,8 +18,6 @@ endif()
 
 
 # My variable
-set (TEST "test.c")
-
 set(
     SOURCES
     "src/BigInt/create.c"
@@ -27,7 +25,6 @@ set(
     "src/BigInt/to_string.c"
     "src/tools/base.c"
     "src/nums.c"
-    TEST
 )
 set (
     INCLUDES
@@ -42,6 +39,16 @@ set (
     "include/tools"
 )
 
-# add_library(${PROJECT_NAME} SHARED ${SOURCES} ${INCLUDES})
-add_executable(${PROJECT_NAME} ${SOURCES})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+add_library(${PROJECT_NAME} SHARED ${SOURCES} ${INCLUDES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIRECTORIES})
+
+
+
+# ON if tests
+option(PBM_BUILD_TESTS "Build PBM tests" ON)
+if(PBM_BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
