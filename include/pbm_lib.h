@@ -1,5 +1,5 @@
-#ifndef PBM____LIB_h
-#define PBM____LIB_h
+#ifndef __PBM____LIB_h
+#define __PBM____LIB_h
 
 #include "pbm_types.h"
 #include "pbm_BigInt.h"

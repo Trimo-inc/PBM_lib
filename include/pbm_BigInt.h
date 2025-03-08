@@ -1,5 +1,5 @@
-#ifndef PBM_BIGINT_h
-#define PBM_BIGINT_h
+#ifndef __PBM_BIGINT_h
+#define __PBM_BIGINT_h
 #include "./pbm_types.h"
 
 
@@ -14,7 +14,7 @@
  * ${NotNull}
  * @return struct pbm_BigInt. Если ошибка, то структура не действительна (хранит мусор)
  */
-pbm_BigInt pbm_BigInt_create(
+pbm_BigInt_ptr pbm_BigInt_create(
     const char* _num,
     const enum pbm_ns _num_system,
     const char _is_negative,
@@ -25,7 +25,7 @@ pbm_BigInt pbm_BigInt_create(
  * @brief Безопастно удаляет struct pbm_BigInt
  * @param[out] _inum ${Nullable} 
  */
-void pbm_BigInt_delete(pbm_BigInt* _inum);
+void pbm_BigInt_delete(pbm_BigInt_ptr _inum);
 
 
 /**
@@ -33,15 +33,14 @@ void pbm_BigInt_delete(pbm_BigInt* _inum);
  * @param[out] a Слагаемое и сумма (записывается результат)
  * @param[in]  b Слагаемое
  */
-void pbm_BigInt_base_add(pbm_BigInt* a, const pbm_BigInt* b);
-
+void pbm_BigInt_base_add(pbm_BigInt_ptr a, const pbm_BigInt_ptr b);
 
 /**
  * @brief Вычитает два числа, игнорируя знак, помещая результат в параметр "a"
  * @param[out] a Уменьшаемое и разность (записывается результат)
  * @param[in]  b Вычитаемое
  */
-void pbm_BigInt_base_sub(pbm_BigInt* a, const pbm_BigInt* b);
+void pbm_BigInt_base_sub(pbm_BigInt_ptr a, const pbm_BigInt_ptr b);
 
 
 /**
@@ -49,7 +48,7 @@ void pbm_BigInt_base_sub(pbm_BigInt* a, const pbm_BigInt* b);
  * @param[out] a Множитель и произведение (записывается результат)
  * @param[in]  b Множитель
  */
-void pbm_BigInt_base_mul(pbm_BigInt* a, const pbm_BigInt* b);
+void pbm_BigInt_base_mul(pbm_BigInt_ptr a, const pbm_BigInt_ptr b);
 
 
 /**
@@ -57,7 +56,7 @@ void pbm_BigInt_base_mul(pbm_BigInt* a, const pbm_BigInt* b);
  * @param[out] a Делимое и частное (записывается результат)
  * @param[in]  b Делитель
  */
-void pbm_BigInt_base_div(pbm_BigInt* a, const pbm_BigInt* b);
+void pbm_BigInt_base_div(pbm_BigInt_ptr a, const pbm_BigInt_ptr b);
 
 
 
@@ -76,7 +75,7 @@ void pbm_BigInt_base_div(pbm_BigInt* a, const pbm_BigInt* b);
  * @param[out] _Bint  Структура, в которую идёт запись целого числа. ${NotNull}
  */
 void pbm__BigInt_2pow_process_reading(
-    const char* ___num, const uint16_t power, pbm_BigInt* _Bint);
+    const char* ___num, const uint16_t power, struct pbm_BigInt* _Bint);
 
 
 /**
@@ -84,7 +83,7 @@ void pbm__BigInt_2pow_process_reading(
  * @param[in] ___num Строка с числом в десятичной системе
  * @param[out] _Bint Структура для хранения числа
  */
-void pbm__BigInt_10_process_reading(const char* ___num, pbm_BigInt* _Bint);
+void pbm__BigInt_10_process_reading(const char* ___num, struct pbm_BigInt* _Bint);
 
 
 /*
@@ -98,5 +97,5 @@ void pbm__BigInt_10_process_reading(const char* ___num, pbm_BigInt* _Bint);
  * @param[in] num Число
  * @return Строка с числом в десятичной системе счисления
  */
-char* pbm_BigInt_str(const pbm_BigInt* num);
+char* pbm_BigInt_str(const pbm_BigInt_ptr num);
 #endif

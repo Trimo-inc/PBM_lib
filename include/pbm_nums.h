@@ -1,4 +1,7 @@
+#ifndef __PBM_nums_h
+#define __PBM_nums_h
 #include "./pbm_types.h"
+
 
 /**
  * @brief Создаёт систему счисления. Каждый индекс соответствует числу.
@@ -23,3 +26,4 @@ void pbm_nums_init(struct pbm_nums* nums, const char* strings);
  * @param[out] nums Структура система счисления ${Nullable}
  */
 void pbm_nums_delete(struct pbm_nums* nums);
+#endif

@@ -36,4 +36,26 @@ char pbm___get_c(const char _c);
  */
 uint8_t pbm___get_order(uint32_t num);
 
+
+/**
+ * @brief Делит строку-число пополам
+ * @author [Trimo] Списал реализацию
+ * @author [Denis (not Trimo)] Сделал реализацию
+ * @param[out] _str {NotNull} & {Предполагается, что вся строка хранит числа}. Строка с числами. {Изменяется} 
+ * @param[out] _remainder {NotNull} Остаток от последней цифры {Изменяется}
+ * @return Указатель на текущую строку
+ */
+char* pbm__halve_str(char* _str, char* _remainder);
+
+
+
+
+
+/**
+ * @brief Генерирует запись числа N
+ * @param[in] _Bint {NotNull} Наше число
+ * @return Запись числа N. {Dynamic}
+ * Например, для N = "1234567890700001234567" результат 66*(2^32 - 1)^2+3977395090*(2^32 - 1)^1+349851271*(2^32 - 1)^0
+ */
+char* _pbm_generator_(const pbm_BigInt_ptr _Bint);
 #endif

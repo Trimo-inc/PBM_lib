@@ -3,17 +3,15 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
 
-void pbm__BigInt_2pow_process_reading(const char* ___num, const uint16_t power, pbm_BigInt* _Bint)
+void pbm__BigInt_2pow_process_reading(const char* ___num, const uint16_t power, struct pbm_BigInt* _Bint)
 {
-    // Маска для получения только нужных бит из цифры
-    uint32_t chunk_mask = (1 << power) - 1;  
-
     // Вычисляем количество чанков, которые потребуется для записи числа
     size_t num_len = strlen(___num);
     size_t num_chunks = (num_len * power + 31) / 32; // Количество 32-битных чанков
 
-    _Bint->chunks = (uint32_t*)malloc(num_chunks * sizeof(uint32_t));
+    //_Bint->chunks = (uint32_t*)malloc(num_chunks * sizeof(uint32_t));
     if (!_Bint->chunks) {
         return;
     }
@@ -42,35 +40,53 @@ void pbm__BigInt_2pow_process_reading(const char* ___num, const uint16_t power, 
 
 
 
-void pbm__BigInt_10_process_reading(const char* ___num, pbm_BigInt* _Bint)
+void pbm__BigInt_10_process_reading(const char* ___num, struct pbm_BigInt* _Bint)
 {
     size_t len = strlen(___num);
-    size_t num_chunks = (len + 9) / 10; // Каждый чанк вмещает до 10 цифр
-    _Bint->chunks = (uint32_t*)malloc(num_chunks * sizeof(uint32_t));
+    size_t chunk_capacity = ceil((double)(len / PBM_log_base));
+    _Bint->chunks = calloc(chunk_capacity, sizeof(pbm_digit_t));
+    _Bint->size = 0;
 
-    _Bint->size = num_chunks;
+    #if (ARCH == 32)
+    unsigned char shift = 0;
+    #elif (ARCH == 64)
+    pbm_digit_t shift = 0;
+    #endif
 
-    size_t current_chunk = 0;
-    uint32_t current_value = 0;
-    size_t digit_count = 0;
 
-    // Проходим по всем цифрам строки
-    for (size_t i = len; i-- > 0;) {
-        char c = ___num[i];
-        current_value = current_value * 10 + (c - '0');
-        ++digit_count;
+    
+    char* const  copy = malloc(len); // Временная переменная (копия ___num)
+    copy[len - 1] = '\0';
+    strcpy(copy, ___num);
+    
+    char* str = copy;
+    #if (ARCH == 32)
+    char bit;
 
-        // Если чанк заполнился (10 цифр, то есть 32 бита), записываем его в структуру
-        if (digit_count == 10) {
-            _Bint->chunks[current_chunk++] = current_value;
-            current_value = 0;
-            digit_count = 0;
-        }
+    #elif (ARCH == 64)
+    pbm_digit_t bit = 0;
+    #endif
+
+    while (*str) {
+        str = pbm__halve_str(str, (char*)&bit);
+
+        
+
+        if (shift == PBM_digit_bits) {
+            ++_Bint->size;
+            shift = 0;
+        }       
+        
+        _Bint->chunks[_Bint->size] |= (pbm_digit_t)(bit << shift);
+        
+        ++shift;
     }
 
-    // Если осталась неполная группа цифр, записываем оставшиеся цифры в последний чанк
-    if (digit_count > 0) {
-        _Bint->chunks[current_chunk] = current_value;
+    
+    if (_Bint->size && _Bint->chunks[_Bint->size] == 0) {
+        _Bint->chunks[_Bint->size] = 1;
     }
+    ++_Bint->size;
+    free(copy);
 
 }

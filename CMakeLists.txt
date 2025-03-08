@@ -9,12 +9,25 @@ if(POLICY CMP0077)
     cmake_policy(SET CMP0077 NEW)
 endif()
 
+# 'x64' || 'Win32' 
+set(CMAKE_GENERATOR_PLATFORM x64)
 
 if(MSVC)
     add_compile_options(/W4 /WX)
 else()
     add_compile_options(-Wall -Wextra -pedantic)
 endif()
+
+
+
+if(CMAKE_GENERATOR_PLATFORM STREQUAL "x64")
+    message("ARCH is 64-bits")
+    add_definitions(-DARCH=64)
+elseif(CMAKE_GENERATOR_PLATFORM STREQUAL "x32")
+    message("ARCH is 32-bits")
+    add_definitions(-DARCH=32)
+endif()
+
 
 
 # My variable

@@ -57,3 +57,28 @@ uint8_t pbm___get_order(uint32_t num)
     return order;
     #endif
 }
+
+
+
+
+char* pbm__halve_str(char* _str, char* _remainder)
+{
+    *_remainder = 0;
+    char flag = 1; 
+    char* ret = _str;
+
+    pbm_digit_t dividend, result;
+    for (size_t i = 0; _str[i] != '\0'; ++i) {
+        char digit = _str[i] - '0'; 
+        dividend = (*_remainder) * 10 + digit;
+        result   = dividend / 2;
+        *_remainder = dividend % 2;
+
+        _str[i] = result + '0';
+        if (0 == result && flag) {
+            ret = _str + i + 1;
+        } else flag = 0;
+    }
+    return ret;
+}
+

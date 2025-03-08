@@ -1,10 +1,38 @@
-#ifndef PBM_TYPES_h
-#define PBM_TYPES_h
+#ifndef __PBM_TYPES_h
+#define __PBM_TYPES_h
 #include <stdint.h>
+
+#if (ARCH == 64)
+/* 64-bits on linux or windows */
+typedef uint64_t pbm_digit_t; 
+#define PBM_ibase (0xFFFFFFFFFFFFFFFF)
+#define PBM_log_base (19.264)
+
+#endif
+
+#if (ARCH == 32)
+/* 32-bits on linux or windows*/
+typedef uint32_t pbm_digit_t; 
+#define PBM_ibase ((uint32_t)4294967295) 
+#define PBM_log_base (9.36)
+
+#endif
+
+#if (ARCH == 64)
+// 64 bits
+#define PBM_digit_bits ((sizeof(pbm_digit_t) * 8))
+#elif (ARCH == 32)
+// 32 bits
+#define PBM_digit_bits ((sizeof(pbm_digit_t) * 8))
+#endif
+  
+
+
+
 
 
 /**
- * @brief The basic number system
+ * @brief Базовые системы счисления.
  */
 enum pbm_ns {
     bin = 2,
@@ -19,14 +47,22 @@ enum pbm_ns {
 
 
 
-#define PBM__MODVALUE (1000000000U)
-#define PBM__BITS_PER_CHUNK (32)
-
-typedef struct {
-    uint32_t* chunks;
+/**
+ * @brief Хранит огромное целое число.
+ * 
+ */
+struct pbm_BigInt {
+    pbm_digit_t* chunks;
     size_t size;
     char is_negative;
-} pbm_BigInt;
+};
+
+/**
+ * @brief Указатель на структуру pbm_BigInt.
+ * Предполагается, что объект будет в куче.
+ */
+typedef struct pbm_BigInt* pbm_BigInt_ptr; 
+
 
 typedef char* bin_str;
 typedef char* oct_str;
