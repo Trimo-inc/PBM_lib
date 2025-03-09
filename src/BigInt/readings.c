@@ -47,13 +47,7 @@ void pbm__BigInt_10_process_reading(const char* ___num, struct pbm_BigInt* _Bint
     _Bint->chunks = calloc(chunk_capacity, sizeof(pbm_digit_t));
     _Bint->size = 0;
 
-    #if (ARCH == 32)
-    unsigned char shift = 0;
-    #elif (ARCH == 64)
     pbm_digit_t shift = 0;
-    #endif
-
-
     
     char* const  copy = malloc(len); // Временная переменная (копия ___num)
     copy[len - 1] = '\0';
@@ -62,23 +56,28 @@ void pbm__BigInt_10_process_reading(const char* ___num, struct pbm_BigInt* _Bint
     char* str = copy;
     #if (ARCH == 32)
     char bit;
-
     #elif (ARCH == 64)
     pbm_digit_t bit = 0;
     #endif
 
     while (*str) {
+        #if (ARCH == 32)
+        str = pbm__halve_str(str, &bit);
+        #elif (ARCH == 64)
         str = pbm__halve_str(str, (char*)&bit);
-
+        #endif
         
 
         if (shift == PBM_digit_bits) {
             ++_Bint->size;
             shift = 0;
         }       
-        
+        #if (ARCH == 32)
+        _Bint->chunks[_Bint->size] |= (bit << shift);
+        #elif (ARCH == 64)
         _Bint->chunks[_Bint->size] |= (pbm_digit_t)(bit << shift);
         
+        #endif
         ++shift;
     }
 
