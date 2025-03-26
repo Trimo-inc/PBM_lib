@@ -6,15 +6,16 @@
 // Базовые операции над struct pbm_BigInt
 
 /**
- * @brief Создаёт структуру для хранения больших целых чисел (без учёта знака)
+ * @brief Создаёт структуру для хранения больших целых чисел.
+ * Безопасная версия.
  * @param[in] _num Строка с числом ${NotNull}
  * @param[in] _num_system Система счисления, в которой представлено ваше число
  * @param[in] _is_negative Будет ли число отрицательным (0 - если нет)
  * @param[out,in] _err Код ошибки, если равен == 0, то число образовалось
  * ${NotNull}
- * @return struct pbm_BigInt. Если ошибка, то структура не действительна (хранит мусор)
+ * @return NULL || инициализированную структуру
  */
-pbm_BigInt_ptr pbm_BigInt_create(
+pbm_BigInt_ptr pbm_BigInt_create_s(
     const char* _num,
     const enum pbm_ns _num_system,
     const char _is_negative,
@@ -22,10 +23,33 @@ pbm_BigInt_ptr pbm_BigInt_create(
 );
 
 /**
- * @brief Безопастно удаляет struct pbm_BigInt
+ * @brief Безопасно удаляет struct pbm_BigInt
  * @param[out] _inum ${Nullable} 
  */
 void pbm_BigInt_delete(pbm_BigInt_ptr _inum);
+
+
+/*
+<<[Конструкторы]>>
+*/
+
+/**
+ * @brief Базовый конструктор для огромного числа
+ * Зануляет структуру
+ * @param[out] _inum Наше число ${NotNull}
+ */
+void __pbm_BigInt_default_ctor(struct pbm_BigInt* _inum);
+
+/**
+ * @brief Конструктор копирования
+ * @param[out] _inum Заполняет данную структуру значениями из другой
+ * @param[in]  _icnum Копируется 
+ */
+void __pbm_BigInt_copy_ctor(struct pbm_BigInt* _inum, const struct pbm_BigInt* _icnum);
+
+
+
+
 
 
 /**
@@ -63,7 +87,7 @@ void pbm_BigInt_base_div(pbm_BigInt_ptr a, const pbm_BigInt_ptr b);
 
 /*
 
-Дополнительные функции для базовых функций
+<<[Дополнительные функции для базовых операций]>>
 
 */
 
@@ -80,10 +104,21 @@ void pbm__BigInt_2pow_process_reading(
 
 /**
  * @brief Преобразует строку в структуру pbm_BigInt
+ * Имеет внутри копирование параметра ___num
  * @param[in] ___num Строка с числом в десятичной системе
  * @param[out] _Bint Структура для хранения числа
  */
 void pbm__BigInt_10_process_reading(const char* ___num, struct pbm_BigInt* _Bint);
+
+
+/**
+ * @brief Преобразует из строки в структуру pbm_BigInt.
+ * @param[out] ___num_str ${NotNull} Строка изменяется, но не переаллоцируется. Строка в десятичном основании
+ * @param[in]  ___len_str Длина строки ___num_str
+ * @param[out] __inum     ${NotNull} Наше число
+ */
+void __pbm__BigInt_10_process_reading(
+    char* ___num_str, size_t __len_str, struct pbm_BigInt* __inum);
 
 
 /*

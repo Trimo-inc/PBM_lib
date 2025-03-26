@@ -41,8 +41,8 @@ uint8_t pbm___get_order(uint32_t num);
  * @brief Делит строку-число пополам
  * @author [Trimo] Списал реализацию
  * @author [Denis (not Trimo)] Сделал реализацию
- * @param[out] _str {NotNull} & {Предполагается, что вся строка хранит числа}. Строка с числами. {Изменяется} 
- * @param[out] _remainder {NotNull} Остаток от последней цифры {Изменяется}
+ * @param[out] _str ${NotNull} & {Предполагается, что вся строка хранит числа}. Строка с числами. {Изменяется} 
+ * @param[out] _remainder ${NotNull} Остаток от последней цифры {Изменяется}
  * @return Указатель на текущую строку
  */
 char* pbm__halve_str(char* _str, char* _remainder);

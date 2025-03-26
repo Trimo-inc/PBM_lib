@@ -41,49 +41,57 @@ void pbm__BigInt_2pow_process_reading(const char* ___num, const uint16_t power, 
 void pbm__BigInt_10_process_reading(const char* ___num, struct pbm_BigInt* _Bint)
 {
     size_t len = strlen(___num);
-    size_t chunk_capacity = ceil((double)(len / PBM_log_base));
-    _Bint->chunks = calloc(chunk_capacity, sizeof(pbm_digit_t));
-    _Bint->size = 0;
+    char* const  copy = malloc(len); // Временная переменная (копия ___num_str)
+    copy[len - 1] = '\0';
+    strcpy(copy, ___num);
+
+    __pbm__BigInt_10_process_reading(copy, len, _Bint);
+}
+
+
+
+
+
+void __pbm__BigInt_10_process_reading(char *___num_str, size_t __len_str, struct pbm_BigInt *__inum)
+{
+    size_t chunk_capacity = ceil((double)(__len_str / PBM_log_base));
+    __inum->chunks = calloc(chunk_capacity, sizeof(pbm_digit_t));
+    __inum->size = 0;
 
     pbm_digit_t shift = 0;
     
-    char* const  copy = malloc(len); // Временная переменная (копия ___num)
-    copy[len - 1] = '\0';
-    strcpy(copy, ___num);
     
-    char* str = copy;
+    
     #if (ARCH == 32)
     char bit;
     #elif (ARCH == 64)
     pbm_digit_t bit = 0;
     #endif
 
-    while (*str) {
+    while (*___num_str) {
         #if (ARCH == 32)
-        str = pbm__halve_str(str, &bit);
+        ___num_str = pbm__halve_str(___num_str, &bit);
         #elif (ARCH == 64)
-        str = pbm__halve_str(str, (char*)&bit);
+        ___num_str = pbm__halve_str(___num_str, (char*)&bit);
         #endif
         
 
         if (shift == PBM_digit_bits) {
-            ++_Bint->size;
+            ++__inum->size;
             shift = 0;
         }       
         #if (ARCH == 32)
-        _Bint->chunks[_Bint->size] |= (bit << shift);
+        __inum->chunks[__inum->size] |= (bit << shift);
         #elif (ARCH == 64)
-        _Bint->chunks[_Bint->size] |= (pbm_digit_t)(bit << shift);
+        __inum->chunks[__inum->size] |= (pbm_digit_t)(bit << shift);
         
         #endif
         ++shift;
     }
 
     
-    if (_Bint->size && _Bint->chunks[_Bint->size] == 0) {
-        _Bint->chunks[_Bint->size] = 1;
+    if (__inum->size && __inum->chunks[__inum->size] == 0) {
+        __inum->chunks[__inum->size] = 1;
     }
-    ++_Bint->size;
-    free(copy);
-
+    ++__inum->size;
 }

@@ -2,14 +2,15 @@
 #include "../../include/tools/base.h"
 #include <stdlib.h>
 
-pbm_BigInt_ptr pbm_BigInt_create(const char *_num, const enum pbm_ns _num_system, const char _is_negative, enum pbm_err *_err)
+pbm_BigInt_ptr pbm_BigInt_create_s(const char *_num, const enum pbm_ns _num_system, const char _is_negative, enum pbm_err *_err)
 {
-    struct pbm_BigInt* bi = (struct pbm_BigInt*)malloc(sizeof(*bi));
+    struct pbm_BigInt* bi = NULL;
     if (_num == NULL || _err == NULL) {
         if (_err)
             *_err = IS_NULL;
         return bi;
     }
+    bi = (struct pbm_BigInt*)malloc(sizeof(*bi));
 
     /*
     Проверяем, что строка действительна
