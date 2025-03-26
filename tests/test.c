@@ -3,6 +3,40 @@
 #include <stdio.h>
 
 
+void __print(const pbm_BigInt_ptr big) {
+    for (size_t i = 0; i < big->size; ++i) {
+        #if ARCH == 32
+        printf("chunks[%u] = ", i);
+        printf("%u\n", big->chunks[i]);
+        #elif ARCH == 64
+        printf("chunks[%llu] = ", i);
+        printf("%llu\n", big->chunks[i]);
+        #endif
+    }
+}
+
+void __print_pow(const pbm_BigInt_ptr big) {
+    for (size_t i = 0; i < big->size; ++i) {
+        #if ARCH == 32
+        printf("(%u)*((2^%u)^%u)+", big->chunks[i], PBM_digit_bits, i);
+        #elif ARCH == 64
+        printf("(%llu)*((2^%llu)^%llu)+", big->chunks[i], PBM_digit_bits, i);
+        #endif
+    }
+    printf("0");
+}
+
+void test2(void) {
+    enum pbm_err e;
+    const char* t[] = {"01010101", "101", "00000", "AEEEEEEEE", "012341234",
+    "010101011010100101010110101010010010010101010101011010101010101101010101011111111100101011010101010"};
+    struct pbm_BigInt* h = pbm_BigInt_create(t[5], bin, 0, &e);
+
+    __print(h);
+    __print_pow(h);
+}
+
+
 
 
 void test(void) {
@@ -40,7 +74,7 @@ void test(void) {
 
 int main()
 {
-    test();
+    test2();
 
     return 0;
 }

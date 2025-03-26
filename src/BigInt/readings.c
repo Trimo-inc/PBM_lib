@@ -7,35 +7,33 @@
 
 void pbm__BigInt_2pow_process_reading(const char* ___num, const uint16_t power, struct pbm_BigInt* _Bint)
 {
-    // Вычисляем количество чанков, которые потребуется для записи числа
-    size_t num_len = strlen(___num);
-    size_t num_chunks = (num_len * power + 31) / 32; // Количество 32-битных чанков
+    const pbm_digit_t per_count = PBM_digit_bits / power;
 
-    //_Bint->chunks = (uint32_t*)malloc(num_chunks * sizeof(uint32_t));
-    if (!_Bint->chunks) {
-        return;
+    // Удаление ведущих нулей
+    while (*___num == '0' && *(___num + sizeof(*___num)) != '\0')
+        ++___num;
+
+    const size_t len = strlen(___num);
+
+    size_t chunk_capacity = (len + per_count - 1) / per_count;
+    _Bint->chunks = (pbm_digit_t*)calloc(chunk_capacity, sizeof(pbm_digit_t));
+    _Bint->size = chunk_capacity;
+    
+    for (size_t i = 0; i < len; ++i) {
+        #if ARCH == 32
+        char digit = (char)pbm___get_c(___num[len - 1 - i]);
+        #elif ARCH == 64
+        pbm_digit_t digit = (pbm_digit_t)pbm___get_c(___num[len - 1 - i]);
+        #endif
+
+        size_t indx = i / per_count;
+        size_t bit_pos = (i % per_count) * power;
+
+
+        _Bint->chunks[indx] |= (digit << bit_pos);
+        
     }
-    
-    _Bint->size = num_chunks;
 
-
-    uint32_t current_chunk = 0;
-    size_t chunk_index = 0;
-    
- 
-    for (size_t i = 0; i < num_len; ++i) {
-        uint32_t digit_value = pbm___get_c(___num[i]);
-
-        // Добавляем цифру в текущий чанк
-        current_chunk = (current_chunk << power) | digit_value;
-
-        // Если текущий чанк заполнился (32 бита), сохраняем его и начинаем новый
-        if ((i + 1) * power >= 32 || i == num_len - 1) {
-            _Bint->chunks[chunk_index++] = current_chunk;
-            current_chunk = 0;  // Сбрасываем чанк
-        }
-    }
-    
 }
 
 
