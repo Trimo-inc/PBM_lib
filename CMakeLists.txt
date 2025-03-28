@@ -43,6 +43,7 @@ set (
     INCLUDES
     "include/pbm_types.h"
     "include/pbm_BigInt.h"
+    "include/BigInteger/pbm_natural.h"
     "include/pbm_nums.h"
     "include/tools/base.h"
 )
