@@ -38,6 +38,10 @@ set(
     "src/BigInt/to_string.c"
     "src/tools/base.c"
     "src/nums.c"
+
+    "src/BigInteger/Natural/base.c"
+    "src/BigInteger/Natural/create.c"
+    "src/BigInteger/Natural/spec.c"
 )
 set (
     INCLUDES
@@ -49,9 +53,12 @@ set (
 )
 set (
     INCLUDE_DIRECTORIES
-    "include"
+    "include/"
     "include/tools"
+    "include/BigInteger"
 )
+
+include_directories(${INCLUDE_DIRECTORIES})
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 

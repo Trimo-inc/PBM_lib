@@ -1,10 +1,9 @@
-#include "../pbm_lib.h"
+#include "pbm_lib.h"
 
 
-#if !__PBM__DEFINED(Natural)
-#define __PBM__(Natural)
-
-#include "../pbm_types.h"
+#ifndef ____PBM_____HEADER_____NATURAL
+#define ____PBM_____HEADER_____NATURAL
+#include "pbm_types.h"
 
 /**
  * @brief Структура для хранения огромных целых чисел без знака.
@@ -191,5 +190,74 @@ void _pbm_natural_move_init_s(pbm_Natural_ptr _inatural, pbm_Natural_ptr _inatur
  * @param[out] _inatural ${Nullable} Нуль-Натуральное число. После успеха становится в NULL
  */
 void _pbm_natural_delete(pbm_Natural_ptr _inatural);
+
+
+
+
+
+
+// <<[Вспомогательные функции]>>
+// Безопасных функций нет, ибо пустая трата времени. Предполагаеся, что они используются только нашей библиотекой.
+/**
+ * @brief Из строки-числа переводит в Нуль-Натуральное число
+ * @param[out] __num_str ${NotNull} Строка, хранящяя число в 10 системе счисления. Изменяется, но не переаллоцируется.
+ * @param[out] _inatural Нуль-Натуральное число. 
+ */
+void ___pbm_natural_spec_10_read(char* __num_str, pbm_Natural_ptr _inatural);
+
+/**
+ * @brief Из строки-числа переводит в Нуль-Натуральное число
+ * @param[in] __num_str  ${NotNull} Строка, хранящяя число в 2 системе счисления.
+ * @param[in] _power     Степень двойки. \em HEX = 16 = 2^4 -> 4
+ * @param[out] _inatural Нуль-Натуральное число. 
+ */
+void ___pbm_natural_spec_2_read(const char* __num_str, const uint16_t _power, pbm_Natural_ptr _inatural);
+
+
+
+
+
+// <<[Функции]>>
+// Для инициализации через строки.
+
+/**
+ * @brief Создаёт структуру большого Нуль-Натурального числа.
+ * Она не проверяет на правильность записи в строке с нужной системой счисления. 
+ * @param[out] _num_str ${NotNull} Строка с числом, записанным в системе счисления `_number_system`. Изменяется, но не переаллоцируется.
+ * @param[in]  _number_system Система счисления, в которой записана строка `_num_str`
+ * @return Нуль-Натуральное число, если NULL, то была ошибка при создании структуры. ${Nullable} | ${Dynamic}
+ */
+pbm_Natural_ptr __pbm_natural_create(char* _num_str, const enum pbm_ns _number_system);
+
+/**
+ * @brief Создаёт структуру большого Нуль-Натурального числа.
+ * Она проверяет на правильность записи в строке с нужной системой счисления. 
+ * @param[out] _num_str ${NotNull} Строка с числом, записанным в системе счисления `_number_system`. Изменяется, но не переаллоцируется.
+ * @param[in]  _number_system  Система счисления, в которой записана строка `_num_str`
+ * @param[in,out] _error       Код ошибки, если успешно, то равно '0'
+ * @return Нуль-Натуральное число, если NULL, то была ошибка при создании структуры. ${Nullable} | ${Dynamic}
+ */
+pbm_Natural_ptr __pbm_natural_create_s(char* _num_str, const enum pbm_ns _number_system, enum pbm_err const* _error);
+
+/**
+ *@brief Создаёт структуру большого Нуль-Натурального числа.
+ * Она не проверяет на правильность записи в строке с нужной системой счисления.
+ * \n
+ * Внутри вызывает `__pbm_natural_create` 
+ * @param[out] _num_str ${NotNull} Строка с числом, записанным в системе счисления `_number_system`. Оно полностью копируется.
+ * @param[in]  _number_system Система счисления, в которой записана строка `_num_str`
+ * @return Нуль-Натуральное число, если NULL, то была ошибка при создании структуры. ${Nullable} | ${Dynamic}
+ */
+pbm_Natural_ptr _pbm_natural_create(const char* _num_str, const enum pbm_ns _number_system);
+
+/**
+ * @brief Безопасно создаёт структуру большого Нуль-Натурального числа.
+ * Она проверяет на правильность записи в строке с нужной системой счисления. 
+ * @param[out] _num_str ${NotNull} Строка с числом, записанным в системе счисления `_number_system`. Оно полностью копируется.
+ * @param[in]  _number_system  Система счисления, в которой записана строка `_num_str`
+ * @param[in,out] _error       Код ошибки, если успешно, то равно '0'
+ * @return Нуль-Натуральное число, если NULL, то была ошибка при создании структуры. ${Nullable} | ${Dynamic}
+ */
+pbm_Natural_ptr _pbm_natural_create_s(const char* _num_str, const enum pbm_ns _number_system, enum pbm_err const* _error);
 
 #endif

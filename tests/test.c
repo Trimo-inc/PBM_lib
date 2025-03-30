@@ -3,24 +3,24 @@
 #include <stdio.h>
 
 
-void __print(const pbm_BigInt_ptr big) {
-    for (size_t i = 0; i < big->size; ++i) {
+void __print(const pbm_Natural_ptr big) {
+    for (size_t i = 0; i < big->_size; ++i) {
         #if ARCH == 32
-        printf("chunks[%u] = ", i);
-        printf("%u\n", big->chunks[i]);
+        printf("digit[%u] = ", i);
+        printf("%u\n", big->digits[i]);
         #elif ARCH == 64
-        printf("chunks[%llu] = ", i);
-        printf("%llu\n", big->chunks[i]);
+        printf("digit[%llu] = ", i);
+        printf("%llu\n", big->digits[i]);
         #endif
     }
 }
 
-void __print_pow(const pbm_BigInt_ptr big) {
-    for (size_t i = 0; i < big->size; ++i) {
+void __print_pow(const pbm_Natural_ptr big) {
+    for (size_t i = 0; i < big->_size; ++i) {
         #if ARCH == 32
-        printf("(%u)*((2^%u)^%u)+", big->chunks[i], PBM_digit_bits, i);
+        printf("(%u)*((2^%u)^%u)+", big->digits[i], PBM_digit_bits, i);
         #elif ARCH == 64
-        printf("(%llu)*((2^%llu)^%llu)+", big->chunks[i], PBM_digit_bits, i);
+        printf("(%llu)*((2^%llu)^%llu)+", big->digits[i], PBM_digit_bits, i);
         #endif
     }
     printf("0");
@@ -30,10 +30,10 @@ void test2(void) {
     enum pbm_err e;
     const char* t[] = {"01010101", "101", "00000", "AEEEEEEEE", "012341234",
     "010101011010100101010110101010010010010101010101011010101010101101010101011111111100101011010101010"};
-    struct pbm_BigInt* h = pbm_BigInt_create_s(t[5], bin, 0, &e);
-
-    __print(h);
-    __print_pow(h);
+    struct pbm_Natural n;
+    ___pbm_natural_spec_2_read(t[5], 1, &n);
+    __print_pow(&n);
+    
 }
 
 

@@ -6,7 +6,7 @@
 /* 64-bits on linux or windows */
 typedef uint64_t pbm_digit_t; 
 #define PBM_ibase (0xFFFFFFFFFFFFFFFF)
-#define PBM_log_base (19.264)
+#define PBM_log_base (19)
 
 #endif
 
@@ -14,7 +14,7 @@ typedef uint64_t pbm_digit_t;
 /* 32-bits on linux or windows*/
 typedef uint32_t pbm_digit_t; 
 #define PBM_ibase ((uint32_t)4294967295) 
-#define PBM_log_base (9.36)
+#define PBM_log_base (9)
 
 #endif
 
