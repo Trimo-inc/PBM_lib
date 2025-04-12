@@ -48,14 +48,12 @@ uint8_t pbm___get_order(uint32_t num);
 char* pbm__halve_str(char* _str, char* _remainder);
 
 
-
-
-
 /**
- * @brief Генерирует запись числа N
- * @param[in] _Bint {NotNull} Наше число
- * @return Запись числа N. {Dynamic}
- * Например, для N = "1234567890700001234567" результат 66*(2^(32))^(2)+3977395090*(2^(32))^(1)+349851271*(2^(32))^(0)
+ * @brief Создаёт копию строки
+ * @param[in] _str Строка, которую копируют ${NotNull}
+ * @return ${Dynamic} Скопированная динамическая строка
+ * \n
+ * Не забудьте использовать free(...) 
  */
-char* _pbm_generator_(const pbm_BigInt_ptr _Bint);
+char* ____pbm_strings_copy(const char* const _str);
 #endif

@@ -1,18 +1,18 @@
 #include "pbm_natural.h"
 #include <string.h>
 #include <stdlib.h>
-
+#include <math.h>
 void ___pbm_natural_spec_10_read(char *__num_str, pbm_Natural_ptr _inatural)
 {
     {
     const size_t len = strlen(__num_str);
-    const size_t chunk_capacity = ((len + PBM_log_base - 1) / PBM_log_base); 
+    const size_t chunk_capacity = ceil((double)(len / PBM_log_base)); 
 
     _inatural->digits = (pbm_digit_t*)calloc(chunk_capacity, sizeof(pbm_digit_t));
     _inatural->_size = 0;
     }
 
-    pbm_digit_t shift = 0, bit;
+    pbm_digit_t shift = 0, bit = 0;
 
     while (*__num_str) {
         __num_str = pbm__halve_str(__num_str, (char*)&bit);

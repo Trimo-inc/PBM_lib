@@ -1,6 +1,8 @@
 #include "../../include/tools/base.h"
 #include "../../include/pbm_types.h"
 #include <ctype.h>
+#include <string.h>
+#include <stdlib.h>
 
 #if defined PBM__TRADITIONAL
 #include <math.h>
@@ -82,3 +84,11 @@ char* pbm__halve_str(char* _str, char* _remainder)
     return ret;
 }
 
+char* ____pbm_strings_copy(const char *const _str)
+{
+    size_t len = strlen(_str);
+    char* copy = (char*)malloc(sizeof(char) * (len + 1));
+    memcpy(copy, _str, len);
+    copy[len] = '\0';
+    return copy;
+}
