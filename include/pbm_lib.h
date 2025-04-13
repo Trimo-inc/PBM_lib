@@ -3,13 +3,10 @@
 
 
 
-
-
 /*
 Включает все необходимые заголовки
 */
 #include "pbm_types.h"
-#include "pbm_BigInt.h"
 #include "pbm_nums.h"
 #include "tools/base.h"
 #include "BigInteger/pbm_natural.h"

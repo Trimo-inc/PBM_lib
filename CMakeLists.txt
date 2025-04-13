@@ -10,7 +10,7 @@ if(POLICY CMP0077)
 endif()
 
 # 'x64' || 'Win32' 
-set(CMAKE_GENERATOR_PLATFORM x64)
+set(CMAKE_GENERATOR_PLATFORM x32)
 
 if(MSVC)
     add_compile_options(/W4 /WX)
@@ -33,9 +33,6 @@ endif()
 # My variable
 set(
     SOURCES
-    "src/BigInt/create.c"
-    "src/BigInt/readings.c"
-    "src/BigInt/to_string.c"
     "src/tools/base.c"
     "src/nums.c"
 
@@ -46,7 +43,6 @@ set(
 set (
     INCLUDES
     "include/pbm_types.h"
-    "include/pbm_BigInt.h"
     "include/BigInteger/pbm_natural.h"
     "include/pbm_nums.h"
     "include/tools/base.h"
