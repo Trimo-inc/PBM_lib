@@ -44,8 +44,8 @@ pbm_Natural_ptr _pbm_natural_create(const char *_num_str, const enum pbm_ns _num
 {
     const char* copy = ____pbm_strings_copy(_num_str);
     
-    pbm_Natural_ptr big = __pbm_natural_create(copy, _number_system);
-    free(copy);
+    pbm_Natural_ptr big = __pbm_natural_create((char*)copy, _number_system);
+    free((char*)copy);
     return big;
 }
 
@@ -53,7 +53,7 @@ pbm_Natural_ptr _pbm_natural_create_s(const char* _num_str, const enum pbm_ns _n
 {
     const char* copy = ____pbm_strings_copy(_num_str);
 
-    pbm_Natural_ptr big = __pbm_natural_create_s(copy, _number_system, _error);
-    free(copy);
+    pbm_Natural_ptr big = __pbm_natural_create_s((char*)copy, _number_system, (enum pbm_err*)_error);
+    free((char*)copy);
     return big;
 }
