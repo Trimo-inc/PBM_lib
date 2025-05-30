@@ -6,7 +6,7 @@ void ___pbm_natural_spec_10_read(char *__num_str, pbm_Natural_ptr _inatural)
 {
     {
     const size_t len = strlen(__num_str);
-    const size_t chunk_capacity = ceil((double)(len / PBM_log_base)); 
+    const size_t chunk_capacity = (size_t)ceil((double)(len / PBM_log_base)); 
 
     _inatural->digits = (pbm_digit_t*)calloc(chunk_capacity, sizeof(pbm_digit_t));
     _inatural->_size = 0;
@@ -31,33 +31,36 @@ void ___pbm_natural_spec_10_read(char *__num_str, pbm_Natural_ptr _inatural)
     ++_inatural->_size;
 }
 
-
 void ___pbm_natural_spec_2_read(const char *__num_str, const uint16_t _power, pbm_Natural_ptr _inatural)
-
 {
     while (*__num_str == '0' && *(__num_str + sizeof(*__num_str)) != '\0') {
         ++__num_str; // Пропуск ведущих нулей
     }
     
-    const uint16_t per_digits = PBM_digit_bits / _power;
+    const pbm_digit_t per_digits = (PBM_digit_bits / _power);
     const size_t len = strlen(__num_str);
     {
     const size_t chunk_capacity = (len + per_digits - 1) / per_digits;
     _inatural->digits = (pbm_digit_t*)calloc(chunk_capacity, sizeof(pbm_digit_t));
     }
     
-    pbm_digit_t bit_pos;
+    pbm_digit_t bit_offset = 0;
+    _inatural->_size = 0;
     for (size_t i = 0; i < len; ++i) {
-        #if (ARCH == 32)
-            char digit = pbm___get_c(__num_str[len - i - 1]);
-        #elif (ARCH == 64)
-            pbm_digit_t digit = (pbm_digit_t)pbm___get_c(__num_str[len - i - 1]);
-        #endif
+        pbm_digit_t digit = (pbm_digit_t)pbm___get_c(__num_str[len - i - 1]);
+        if (bit_offset + _power > PBM_digit_bits) {
+            const pbm_digit_t remaining_bits = PBM_digit_bits - bit_offset;
+            _inatural->digits[_inatural->_size] |= (digit & ((1 << remaining_bits) - 1)) << bit_offset;
+            ++_inatural->_size;
+            _inatural->digits[_inatural->_size] = digit >> remaining_bits;
+            bit_offset = _power - remaining_bits;
+        } else {
+            _inatural->digits[_inatural->_size] |= digit << bit_offset;
+            bit_offset += _power;
+        }
 
-        _inatural->_size = i / per_digits;
-        bit_pos = (i % per_digits) * _power;
-        
-        _inatural->digits[_inatural->_size] |= (digit << bit_pos); 
     }
+
     ++_inatural->_size;
 }
+

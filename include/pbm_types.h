@@ -6,7 +6,7 @@
 /* 64-bits on linux or windows */
 typedef uint64_t pbm_digit_t; 
 #define PBM_ibase (0xFFFFFFFFFFFFFFFF)
-#define PBM_log_base (19)
+#define PBM_log_base (19.27)
 
 #endif
 
@@ -14,7 +14,7 @@ typedef uint64_t pbm_digit_t;
 /* 32-bits on linux or windows*/
 typedef uint32_t pbm_digit_t; 
 #define PBM_ibase ((uint32_t)4294967295) 
-#define PBM_log_base (9)
+#define PBM_log_base (9.63)
 
 #endif
 
@@ -37,6 +37,7 @@ typedef uint32_t pbm_digit_t;
 enum pbm_ns {
     bin = 2,
     ter = 3,
+    qua = 4,  // Quaternary 
     oct = 8,
     dec = 10, // default
     hex = 16
