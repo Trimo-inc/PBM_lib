@@ -10,10 +10,10 @@ if(POLICY CMP0077)
 endif()
 
 # 'x64' || 'Win32' 
-set(CMAKE_GENERATOR_PLATFORM x32)
+set(CMAKE_GENERATOR_PLATFORM Win32)
 
 if(MSVC)
-    add_compile_options(/W4 /WX)
+    # add_compile_options(/W4 /WX)
 else()
     add_compile_options(-Wall -Wextra -pedantic)
 endif()
@@ -23,7 +23,7 @@ endif()
 if(CMAKE_GENERATOR_PLATFORM STREQUAL "x64")
     message("ARCH is 64-bits")
     add_definitions(-DARCH=64)
-elseif(CMAKE_GENERATOR_PLATFORM STREQUAL "x32")
+elseif(CMAKE_GENERATOR_PLATFORM STREQUAL "Win32")
     message("ARCH is 32-bits")
     add_definitions(-DARCH=32)
 endif()
@@ -57,7 +57,7 @@ set (
 include_directories(${INCLUDE_DIRECTORIES})
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 add_library(${PROJECT_NAME} SHARED ${SOURCES} ${INCLUDES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIRECTORIES})
 
