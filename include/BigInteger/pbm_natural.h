@@ -7,7 +7,7 @@
 
 /**
  * @brief Структура для хранения огромных целых чисел без знака.
- * Представляет собой нуль натуральное множество одного числа.
+ * Представляет собой нуль натуральное число.
  * Всегда положительно.
  */
 struct pbm_Natural {
@@ -33,8 +33,10 @@ typedef struct pbm_Natural* pbm_Natural_ptr;
 
 
 // <<[Функции]>>
-
-
+/*
+Если перед именем функции стоит '__', значит излишнее копирование избегается
+Если перед именем функции стоит '_', значит будет копирование
+*/
 // [Конструкторы]
 // [По умолчанию]
 /**
@@ -50,7 +52,7 @@ void _pbm_natural_default_init(pbm_Natural_ptr _inatural);
  * Заполняет структуру нулями. 
  * \n
  * Внутри вызывает функцию `_pbm_natural_default_init`, но перед этим очищает структуру, убирая утечки памяти.
- * @param[out] _inatural Нуль-Натуральное число ${Dynamic} 
+ * @param[out] _inatural Нуль-Натуральное число  
  */
 void _pbm_natural_default_init_s(pbm_Natural_ptr _inatural);
 
@@ -58,22 +60,22 @@ void _pbm_natural_default_init_s(pbm_Natural_ptr _inatural);
 // [Пользовательские]
 /**
  * @brief Пользовательский конструктор без копирования чисел.
- * Просто инициализирует структуру нуль-натуральных чисел, как агрегатная инициализация.
+ * Просто инициализирует структуру нуль-натурального числа, как агрегатная инициализация.
  * @warning Если `_inatural` уже заполнен, то возможна утечка памяти. 
  * @param[out] _inatural Нуль-Натуральное число
- * @param[in]  _digits ${NotNull} Числа по основанию `PBM_ibase`. Они лишь присваиваются.
+ * @param[in]  _digits Числа по основанию `PBM_ibase`. Они лишь присваиваются.
  * @param[in] __size  Размер `_digits`
  */
 void __pbm_natural_custom_init(pbm_Natural_ptr _inatural, pbm_digit_t* const _digits, const size_t __size);
 
 /**
  * @brief Пользовательский конструктор с копированием чисел.
- * Просто инициализирует структуру нуль-натуральных чисел, как агрегатная инициализация.
+ * Просто инициализирует структуру нуль-натурального числа, как агрегатная инициализация.
  * \n
  * Внутри использует `__pbm_natural_custom_init`
  * @warning Если `_inatural` уже заполнен, то возможна утечка памяти. 
  * @param[out] _inatural Нуль-Натуральное число
- * @param[in] _digits ${NotNull} Числа по основанию `PBM_ibase`. Они копируются. Не забудьте, что сначала младшие разряды, потом страшие.
+ * @param[in] _digits Числа по основанию `PBM_ibase`. Они копируются. Не забудьте, что сначала младшие разряды, потом страшие.
  * @param[in] __size  Размер `_digits`
  */
 void _pbm_natural_custom_init (pbm_Natural_ptr _inatural, const pbm_digit_t* _digits, const size_t __size);
@@ -85,7 +87,7 @@ void _pbm_natural_custom_init (pbm_Natural_ptr _inatural, const pbm_digit_t* _di
  * \n
  * Внутри использует `__pbm_natural_custom_init` 
  * @param[out] _inatural Нуль-Натуральное число ${Dynamic}
- * @param[in]  _digits ${NotNull} Числа по основанию `PBM_ibase`. Они лишь присваиваются. 
+ * @param[in]  _digits Числа по основанию `PBM_ibase`. Они лишь присваиваются. 
  * @param[in] __size  Размер `_digits`
  */
 void __pbm_natural_custom_init_s(pbm_Natural_ptr _inatural, pbm_digit_t* const _digits, const size_t __size);
@@ -95,8 +97,8 @@ void __pbm_natural_custom_init_s(pbm_Natural_ptr _inatural, pbm_digit_t* const _
  * Просто инициализирует структуру нуль-натуральных чисел, как агрегатная инициализация.
  * \n
  * Внутри использует `_pbm_natural_custom_init`
- * @param[out] _inatural Нуль-Натуральное число ${Dynamic}
- * @param[in] _digits ${NotNull} Числа по основанию `PBM_ibase`. Они копируются. Не забудьте, что сначала младшие разряды, потом страшие.
+ * @param[out] _inatural Нуль-Натуральное число 
+ * @param[in] _digits Числа по основанию `PBM_ibase`. Они копируются. Не забудьте, что сначала младшие разряды, потом страшие.
  * @param[in] __size  Размер `_digits`
  */
 void _pbm_natural_custom_init_s (pbm_Natural_ptr _inatural, const pbm_digit_t* _digits, const size_t __size);
@@ -156,7 +158,7 @@ void _pbm_natural_copy_init_s(pbm_Natural_ptr _inatural, const pbm_Natural_ptr _
  * @param[out] _inatural Нуль-Натуральное число. В него идёт копирование `_inatural_copy`
  * @param[in]  _inatural_copy Нуль-Натуральное число, с которого полностью скопируются данные. Сам он не меняется.
  */
-void __pbm_natural_move_init(pbm_Natural_ptr _inatural, const pbm_Natural_ptr _inatural_move);
+void __pbm_natural_move_init(pbm_Natural_ptr* _inatural, const pbm_Natural_ptr* _inatural_move);
 
 /**
  * @brief Безопасный конструктор перемещения.
@@ -166,7 +168,7 @@ void __pbm_natural_move_init(pbm_Natural_ptr _inatural, const pbm_Natural_ptr _i
  * @param[out] _inatural Нуль-Натуральное число. Очищается и затем в него идёт перемещение `_inatural_move`. ${Dynamic}
  * @param[in]  _inatural_copy Нуль-Натуральное число, с которого полностью скопируются данные. Сам он не меняется.
  */
-void __pbm_natural_move_init_s(pbm_Natural_ptr _inatural, const pbm_Natural_ptr _inatural_move);
+void __pbm_natural_move_init_s(pbm_Natural_ptr* _inatural, const pbm_Natural_ptr* _inatural_move);
 
 /**
  * @brief Конструктор перемещения.
@@ -177,7 +179,7 @@ void __pbm_natural_move_init_s(pbm_Natural_ptr _inatural, const pbm_Natural_ptr 
  * @param[out] _inatural Нуль-Натуральное число. Очищается и в него идёт копирование `_inatural_move`
  * @param[in]  _inatural_copy Нуль-Натуральное число, с которого полностью скопируются данные. Потом данные становится в NULL
  */
-void _pbm_natural_move_init(pbm_Natural_ptr _inatural, pbm_Natural_ptr _inatural_move);
+void _pbm_natural_move_init(pbm_Natural_ptr* _inatural, pbm_Natural_ptr* _inatural_move);
 
 /**
  * @brief Конструктор перемещения.
@@ -187,7 +189,7 @@ void _pbm_natural_move_init(pbm_Natural_ptr _inatural, pbm_Natural_ptr _inatural
  * @param[out] _inatural Нуль-Натуральное число. В него идёт копирование `_inatural_copy` ${Dynamic}
  * @param[in]  _inatural_copy Нуль-Натуральное число, с которого полностью скопируются данные. Потом данные становится в NULL
  */
-void _pbm_natural_move_init_s(pbm_Natural_ptr _inatural, pbm_Natural_ptr _inatural_move);
+void _pbm_natural_move_init_s(pbm_Natural_ptr* _inatural, pbm_Natural_ptr* _inatural_move);
 
 
 
@@ -201,7 +203,7 @@ void _pbm_natural_move_init_s(pbm_Natural_ptr _inatural, pbm_Natural_ptr _inatur
 void _pbm_natural_delete(pbm_Natural_ptr _inatural);
 
 /**
- * @brief Безопасное удаление на стеке. Очищает `_intural->_size` и `_intural->digits`, после этого их значения не зануляются.
+ * @brief Безопасное удаление на стеке. Очищает `_inatural->_size` и `_intural->digits`, после этого их значения не зануляются. В них лежит мусор.
  * @param[out] _inatural ${Nullable} ${Dynamic | Stack} Нуль-Натуральное число.
  * \n
  * Если ${Dynamic} -> после вызова используйте free(...)

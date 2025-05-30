@@ -46,6 +46,7 @@ void _pbm_natural_custom_init_s(pbm_Natural_ptr _inatural, const pbm_digit_t *_d
 
 void _pbm_natural_i_init(pbm_Natural_ptr _inatural, pbm_digit_t _number)
 {
+	_inatural->digits  = (pbm_digit_t*)malloc(sizeof(pbm_digit_t));
     *_inatural->digits = _number;
     _inatural->_size   = 1;
 }
@@ -69,39 +70,35 @@ void _pbm_natural_copy_init_s(pbm_Natural_ptr _inatural, const pbm_Natural_ptr _
 }
 
 
-void __pbm_natural_move_init(pbm_Natural_ptr _inatural, const pbm_Natural_ptr _inatural_move)
+void __pbm_natural_move_init(pbm_Natural_ptr* _inatural, const pbm_Natural_ptr* _inatural_move)
 {
-    _inatural = _inatural_move;
+    *_inatural = *_inatural_move;
 }
 
-void __pbm_natural_move_init_s(pbm_Natural_ptr _inatural, const pbm_Natural_ptr _inatural_move)
+void __pbm_natural_move_init_s(pbm_Natural_ptr* _inatural, const pbm_Natural_ptr* _inatural_move)
 {
-    _pbm_natural_delete(_inatural);
-    __pbm_natural_move_init(_inatural, _inatural_move);
+    _pbm_natural_delete(*_inatural);
+    __pbm_natural_move_init(*_inatural, *_inatural_move);
 }
 
 
-void _pbm_natural_move_init(pbm_Natural_ptr _inatural, pbm_Natural_ptr _inatural_move)
+void _pbm_natural_move_init(pbm_Natural_ptr* _inatural, pbm_Natural_ptr* _inatural_move)
 {
-    __pbm_natural_move_init(_inatural, _inatural_move);
-    _pbm_natural_default_init(_inatural_move);
+    __pbm_natural_move_init(*_inatural, *_inatural_move);
+    _pbm_natural_default_init(*_inatural_move);
 }
 
-void _pbm_natural_move_init_s(pbm_Natural_ptr _inatural, pbm_Natural_ptr _inatural_move)
+void _pbm_natural_move_init_s(pbm_Natural_ptr* _inatural, pbm_Natural_ptr* _inatural_move)
 {
-    __pbm_natural_move_init_s(_inatural, _inatural_move);
-    _pbm_natural_default_init(_inatural_move);
+    __pbm_natural_move_init_s(*_inatural, *_inatural_move);
+    _pbm_natural_default_init(*_inatural_move);
 }
 
 
 void _pbm_natural_delete(pbm_Natural_ptr _inatural)
 {
-    if (_inatural) {
-        if (_inatural->_size && _inatural->digits) {
-            free(_inatural->digits);
-        }
-        free(_inatural);
-    }
+    __pbm_natural_stack_delete(_inatural);
+	free(_inatural);
 }
 
 void __pbm_natural_stack_delete(struct pbm_Natural *_inatural)
