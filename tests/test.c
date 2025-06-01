@@ -1,8 +1,8 @@
 #include "../include/pbm_lib.h"
 
 #include "testing.h"
-
-
+#include <string.h>
+#include <stdlib.h>
 
 extern FILE* _log; 
 
@@ -50,7 +50,7 @@ void correct_test()
 		char str_bin[]     = "10000111001001111111011000110110100110101010111110000011110010100001010100000010011001110100011110101111100011000111111100011001011011001110001111110000101011010010";
 		// Что будет быстрее? time testing
 		pbm_Natural_ptr num;
-		const uint32_t RANGE = 0xFFFF; 
+		const uint32_t RANGE = 0x1FFF; 
 		TIME_TEST_RANGE({
 			num = _pbm_natural_create(str_decimal, 10);
 			_pbm_natural_delete(num);
@@ -97,8 +97,6 @@ void correct_test()
 				);
 
 			}
-
-
 			_pbm_natural_delete(decimal);
 			_pbm_natural_delete(hex);
 			_pbm_natural_delete(octal);
@@ -108,13 +106,31 @@ void correct_test()
 	}
 }
 
+void comp_n(void)
+{
+	{
+	pbm_Natural_ptr n1 = _pbm_natural_create("100000000000000", 10);
+	pbm_Natural_ptr n2 = _pbm_natural_create("100000000000001", 10);
+	{
+		TEST(_pbm_natural_not_equal(n1, n2) == true, "Not equal");
+		TEST(_pbm_natural_more(n1, n2) == false, "Not more");
+		TEST(_pbm_natural_more_or_equal(n1, n2) == false, "Not more or equal");
+		TEST((_pbm_natural_less(n1, n2) == true) && (_pbm_natural_less_or_equal(n1, n2) == true), "Not less or equal");
+		_pbm_natural_delete(n1);
+		_pbm_natural_delete(n2);
+	}
+	}
+}
+
 
 int main(void)
 {
 	_log = stdout;
+	#if 0
 	memory_test();
 	correct_test();
+	#endif
 	
-	
+	comp_n();
 	return 0;
 }

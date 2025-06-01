@@ -33,7 +33,7 @@ while(0);
     long micros = end.tv_usec - start.tv_usec;                                  \
     fprintf(                                                                    \
         _log,                                                                   \
-        "[PROGRAM]:<%s>\n%s\nTime spend: %ld.%08ld secound\n",                  \
+        "[PROGRAM]:<%s>\n%s\nTime spend: %ld.%08ld seconds\n",                  \
         __func__, #block_, seconds, micros);                                    \
 } while(0); 
 #else
@@ -43,7 +43,7 @@ while(0);
     clock_t end   = clock();                                                    \
     double time_spent = (double)(end - start) / CLOCKS_PER_SEC;                 \
     fprintf(_log,                                                               \
-        "[PROGRAM]:<%s>\n%s\nTime spend: %.8f second\n\n",                      \
+        "[PROGRAM]:<%s>\n%s\nTime spend: %.8f seconds\n\n",                     \
         __func__, #block_, time_spent);                                         \
 }                                                                               \
 while(0);
@@ -69,7 +69,7 @@ while(0);
 void __print_natural_pow(const pbm_Natural_ptr big) {
     for (size_t i = 0; i < big->_size; ++i) {
         #if ARCH == 32
-        fprintf(_log, "(%u)*((2^%u)^%u)+", big->digits[i], PBM_digit_bits, i);
+        fprintf(_log, "(%u)*((2^%u)^%u)+", big->digits[i], (unsigned int)PBM_digit_bits, (unsigned int)i);
         #elif ARCH == 64
         fprintf(_log, "(%llu)*((2^%llu)^%llu)+", big->digits[i], PBM_digit_bits, i);
         #endif

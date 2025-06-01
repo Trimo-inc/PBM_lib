@@ -10,7 +10,7 @@ if(POLICY CMP0077)
 endif()
 
 # 'x64' || 'Win32' 
-set(CMAKE_GENERATOR_PLATFORM Win32)
+set(CMAKE_GENERATOR_PLATFORM Win64)
 
 if(MSVC)
     # add_compile_options(/W4 /WX)
@@ -20,7 +20,7 @@ endif()
 
 
 
-if(CMAKE_GENERATOR_PLATFORM STREQUAL "x64")
+if(CMAKE_GENERATOR_PLATFORM STREQUAL "x64" OR CMAKE_GENERATOR_PLATFORM STREQUAL "Win64")
     message("ARCH is 64-bits")
     add_definitions(-DARCH=64)
 elseif(CMAKE_GENERATOR_PLATFORM STREQUAL "Win32")
@@ -39,6 +39,8 @@ set(
     "src/BigInteger/Natural/base.c"
     "src/BigInteger/Natural/create.c"
     "src/BigInteger/Natural/spec.c"
+    "src/BigInteger/Natural/base_operations.c"
+    # [Future]: "src/BigInteger/Natural/to_string.c"
 )
 set (
     INCLUDES
@@ -68,4 +70,5 @@ option(PBM_BUILD_TESTS "Build PBM tests" ON)
 if(PBM_BUILD_TESTS)
     enable_testing()
     add_subdirectory(tests)
+    # add_definitions(-D____PBM_inline)
 endif()
