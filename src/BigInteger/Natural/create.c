@@ -2,6 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 
+pbm_Natural_ptr __pbm_natural_default_create(void)
+{
+    pbm_Natural_ptr big = (pbm_Natural_ptr)malloc(sizeof(struct pbm_Natural));
+    _pbm_natural_default_init(big);
+    return big;
+}
+
+
 pbm_Natural_ptr __pbm_natural_create(char *_num_str, const enum pbm_ns _number_system)
 {
     pbm_Natural_ptr big = (pbm_Natural_ptr)malloc(sizeof(struct pbm_Natural));

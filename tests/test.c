@@ -122,15 +122,40 @@ void comp_n(void)
 	}
 }
 
+void bit_and(void)
+{
+	pbm_Natural_ptr n1 = _pbm_natural_create("10101", 2);
+	pbm_Natural_ptr n2 = _pbm_natural_create("01110", 2);
+	{
+		pbm_Natural_ptr n = _pbm_natural_bit_and(n1, n2);
+		pbm_Natural_ptr c = _pbm_natural_create("00100", 2);
+		TEST(_pbm_natural_equal(n, c) == true, "NO");
+		_pbm_natural_delete(n);
+		_pbm_natural_delete(c);
+	}
+	_pbm_natural_delete(n1);
+	_pbm_natural_delete(n2);
+	n1 = _pbm_natural_create("1000000000010000000010001", 2);
+	n2 = _pbm_natural_create("1000010000000010000100001", 2);
+	{
+		pbm_Natural_ptr n = _pbm_natural_bit_and(n1, n2);
+		pbm_Natural_ptr c = _pbm_natural_create("1000000000000000000000001", 2);
+		TEST(_pbm_natural_equal(n, c) == true, "NO");
+		_pbm_natural_delete(n);
+		_pbm_natural_delete(c);
+	}
+	_pbm_natural_delete(n1);
+	_pbm_natural_delete(n2);
+}
 
 int main(void)
 {
 	_log = stdout;
 	#if 0
 	memory_test();
-	correct_test();
-	#endif
-	
+	correct_test();	
 	comp_n();
+	#endif
+	bit_and();
 	return 0;
 }

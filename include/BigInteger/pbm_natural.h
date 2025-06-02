@@ -75,7 +75,7 @@ void __pbm_natural_custom_init(pbm_Natural_ptr _inatural, pbm_digit_t* const _di
  * Внутри использует `__pbm_natural_custom_init`
  * @warning Если `_inatural` уже заполнен, то возможна утечка памяти. 
  * @param[out] _inatural Нуль-Натуральное число
- * @param[in] _digits Числа по основанию `PBM_ibase`. Они копируются. Не забудьте, что сначала младшие разряды, потом старшие.
+ * @param[in] _digits Числа по основанию `PBM_ibase`. Они копируются. Не забудьте, что сначала младшие разряды, потом старшие. ${Nullable}
  * @param[in] __size  Размер `_digits`
  */
 void _pbm_natural_custom_init (pbm_Natural_ptr _inatural, const pbm_digit_t* _digits, const size_t __size);
@@ -238,6 +238,14 @@ void ___pbm_natural_spec_2_read(const char* __num_str, const uint16_t _power, pb
 // Для инициализации через строки.
 
 /**
+ * @brief Тоже конструктор по-умолчанию.
+ * Внутри вызывает `_pbm_natural_default_init`, но в отличии от неё уже создаёт структуру, т.е. выделяет память под структуру.
+ * @return ${Dynamic} Структура Нуль-Натурального числа, заполненная нулями.
+ * Для удаления используйте `_pbm_natural_delete(...)`
+ */
+pbm_Natural_ptr __pbm_natural_default_create(void);
+
+/**
  * @brief Создаёт структуру большого Нуль-Натурального числа.
  * Она не проверяет на правильность записи в строке с нужной системой счисления. 
  * @param[out] _num_str ${NotNull} Строка с числом, записанным в системе счисления `_number_system`. Изменяется, но не переаллоцируется.
@@ -261,7 +269,7 @@ pbm_Natural_ptr __pbm_natural_create_s(char* _num_str, const enum pbm_ns _number
  * Она не проверяет на правильность записи в строке с нужной системой счисления.
  * \n
  * Внутри вызывает `__pbm_natural_create` 
- * @param[out] _num_str ${NotNull} Строка с числом, записанным в системе счисления `_number_system`. Оно полностью копируется.
+ * @param[in] _num_str ${NotNull} Строка с числом, записанным в системе счисления `_number_system`. Оно полностью копируется.
  * @param[in]  _number_system Система счисления, в которой записана строка `_num_str`
  * @return Нуль-Натуральное число, если NULL, то была ошибка при создании структуры. ${Nullable} | ${Dynamic}
  */
@@ -270,14 +278,19 @@ pbm_Natural_ptr _pbm_natural_create(const char* _num_str, const enum pbm_ns _num
 /**
  * @brief Безопасно создаёт структуру большого Нуль-Натурального числа.
  * Она проверяет на правильность записи в строке с нужной системой счисления. 
- * @param[out] _num_str ${NotNull} Строка с числом, записанным в системе счисления `_number_system`. Оно полностью копируется.
+ * @param[in] _num_str ${NotNull} Строка с числом, записанным в системе счисления `_number_system`. Оно полностью копируется.
  * @param[in]  _number_system  Система счисления, в которой записана строка `_num_str` ${Nullable} если действительно нет ошибок.
  * @param[in,out] _error       Код ошибки, если успешно, то равно '0'
  * @return Нуль-Натуральное число, если NULL, то была ошибка при создании структуры. ${Nullable} | ${Dynamic}
  */
 pbm_Natural_ptr _pbm_natural_create_s(const char* _num_str, const enum pbm_ns _number_system, enum pbm_err const* _error);
 
-
+// Нормализация числа
+/**
+ * @brief Нормализует число, а именно удаляет ненужные нули (Если есть)
+ * @param[out] _inatural Нуль-Натуральное число. Убирает лишние нули, меняет размер, меняет массив чисел (переаллоцируется)
+ */
+void _pbm_natural_normalization(pbm_Natural_ptr _inatural);
 
 
 
@@ -329,7 +342,7 @@ bool _pbm_natural__bool(const pbm_Natural_ptr _inatural);
 bool _pbm_natural_equal(const pbm_Natural_ptr _inatural_1, const pbm_Natural_ptr _inatural_2);
 
 /**
- * @brief Проверяет на неравентсво двух больших Натуральных чисел
+ * @brief Проверяет на неравенство двух больших Натуральных чисел
  * @param[in] _inatural_1 Первое Нуль-Натуральное число
  * @param[in] _inatural_2 Второе Нуль-Натуральное число
  * @return Булевое значение: _inatural_1 != _inatural_2 (первое число не равно второму числу)
@@ -369,4 +382,34 @@ bool _pbm_natural_more_or_equal(const pbm_Natural_ptr _inatural_1, const pbm_Nat
  * @return Булевое значение: _inatural_1 >= _inatural_2 (первое число меньше или равно второму числу)
  */
 bool _pbm_natural_less_or_equal(const pbm_Natural_ptr _inatural_1, const pbm_Natural_ptr _inatural_2);
+
+
+
+// Битовые операции над одним числом
+#if defined(____PBM_bit_not)
+/**
+ * @brief Реверсирует биты у большого числа.
+ * @param[out] _inatural Нуль-Натуральное число, биты которого нужно поменять. 0 -> 1; 1 -> 0;
+ * @return Результат и есть параметр `_inatural`
+ */
+void _pbm_natural_bit_not(pbm_Natural_ptr _inatural);
+#endif
+
+/**
+ * @brief т операцию `побитового И` между Нуль-Натуральным числом и простым числом.
+ * @param[out] _inatural Нуль-Натуральное число, к которому применяется битовое И. ${Change}
+ * @param[in]  _inum     Число, которое используется для побитового И.
+ * \n
+ * Вы можете использовать отрицательные числа, но они могут быть идентичны себе же.
+ * @return Ничего не возвращает. Результат операции является параметр `_inatural`
+ */
+void _pbm_natural_bit_and__int(pbm_Natural_ptr _inatural, const pbm_digit_t _inum);
+
+/**
+ * @brief т операцию `побитового И` между двумя Нуль-Натуральными числами.
+ * @param[in] _inatural_1 Первое Нуль-Натуральное число
+ * @param[in] _inatural_2 Второе Нуль-Натуральное число
+ * @return ${Dynamic | Nullable} Результат, аналогичный между числами (result = _inatural_1 & _inatural_2)
+ */
+pbm_Natural_ptr _pbm_natural_bit_and(const pbm_Natural_ptr _inatural_1, const pbm_Natural_ptr _inatural_2);
 #endif

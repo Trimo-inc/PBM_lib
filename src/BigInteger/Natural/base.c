@@ -32,7 +32,8 @@ void _pbm_natural_custom_init(pbm_Natural_ptr _inatural, const pbm_digit_t *_dig
 {
     const size_t SIZE = __size * sizeof(pbm_digit_t);
     pbm_digit_t* _new = (pbm_digit_t*)malloc(SIZE);
-    memcpy(_new, _digits, SIZE);
+    if (_digits)
+        memcpy(_new, _digits, SIZE);
 
     __pbm_natural_custom_init(_inatural, _new, __size);
 }

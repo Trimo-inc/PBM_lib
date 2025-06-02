@@ -1,9 +1,23 @@
 #include "pbm_natural.h"
 #include "pbm_types.h"
 
+void _pbm_natural_normalization(pbm_Natural_ptr _inatural)
+{
+    struct pbm_Natural* _n;
+    size_t s = _inatural->_size;
+    while(s > 1 && _inatural->digits[s - 1] == 0) {
+        --s;
+    }
+    if(s != _inatural->_size) {
+        _pbm_natural_custom_init(_n, _inatural->digits, s);
+        _pbm_natural_copy_init_s(_inatural, _n);
+    }
+}
+
+
 bool _pbm_natural__bool(const pbm_Natural_ptr _inatural)
 {
-    return (char*)*_inatural->digits;
+    return (bool)*_inatural->digits;
 }
 
 
@@ -113,3 +127,48 @@ bool _pbm_natural_less_or_equal(const pbm_Natural_ptr _inatural_1, const pbm_Nat
         return _pbm_natural_less(_inatural_1, _inatural_2) || _pbm_natural_equal(_inatural_1, _inatural_2);
     #endif
 }
+
+
+#if defined(____PBM_bit_not)
+void _pbm_natural_bit_not(pbm_Natural_ptr _inatural)
+{
+    for(size_t i = 0; i < _inatural->_size; ++i) {
+        _inatural->digits[i] = ~(_inatural->digits[i]);
+    }
+    _pbm_natural_normalization(_inatural);
+}
+#endif
+
+void _pbm_natural_bit_and__int(pbm_Natural_ptr _inatural, const pbm_digit_t _inum)
+{
+    for (size_t i = 0; i < _inatural->_size; ++i) {
+        _inatural->digits[i] &= _inum;
+    }
+    _pbm_natural_normalization(_inatural);
+}
+
+#define MIN(_1, _2) ((_1 < _2) ? (_1) : (_2))
+
+pbm_Natural_ptr _pbm_natural_bit_and(const pbm_Natural_ptr _inatural_1, const pbm_Natural_ptr _inatural_2)
+{
+    pbm_Natural_ptr _ret = __pbm_natural_default_create();
+    if(_ret == NULL)
+        return _ret;
+    size_t min_p;
+    {
+        size_t max_p;
+        if (_inatural_1->_size < _inatural_2->_size) {
+            min_p = _inatural_1->_size;
+            max_p = _inatural_2->_size;
+        } else {min_p = _inatural_2->_size; max_p = _inatural_1->_size;}
+        _pbm_natural_custom_init(_ret, NULL, max_p);
+    }
+    for (size_t i = 0; i < min_p; ++i) {
+        _ret->digits[i] = _inatural_1->digits[i] & _inatural_2->digits[i];
+    }
+
+    _pbm_natural_normalization(_ret);
+    return _ret;
+}
+
+#undef MIN
