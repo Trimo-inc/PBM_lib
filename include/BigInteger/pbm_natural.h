@@ -152,6 +152,14 @@ void _pbm_natural_copy_init_s(pbm_Natural_ptr _inatural, const pbm_Natural_ptr _
 // [Перемещение]
 
 /**
+ * @brief Безопасно перемещает поля структуры из `_inatural_move` в `_inatural`. Не копирует их.
+ * @param[out] _inatural Сначала очищает структуру с помощью `_pbm_natural_stack_delete`.
+ * Потом заполняется данными из `_inatural_move`
+ * @param[in] _inatural_move Перемещает все свои данные (массив чисел и размер) в структуру `_inatural`
+ */
+void __pbm_natural_move_s(pbm_Natural_ptr _inatural, const pbm_Natural_ptr _inatural_move);
+
+/**
  * @brief Конструктор перемещения.
  * `_inatural` будет иметь полную копию `_inatural_move`
  * @warning Если `_inatural` уже заполнен, то возможна утечка памяти.

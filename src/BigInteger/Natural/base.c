@@ -70,6 +70,12 @@ void _pbm_natural_copy_init_s(pbm_Natural_ptr _inatural, const pbm_Natural_ptr _
     _pbm_natural_copy_init(_inatural, _inatural_copy); // inline 
 }
 
+void __pbm_natural_move_s(pbm_Natural_ptr _inatural, const pbm_Natural_ptr _inatural_move)
+{
+    __pbm_natural_stack_delete(_inatural);
+    _inatural->digits = _inatural_move->digits;
+    _inatural->_size  = _inatural_move->_size; 
+}
 
 void __pbm_natural_move_init(pbm_Natural_ptr* _inatural, const pbm_Natural_ptr* _inatural_move)
 {
