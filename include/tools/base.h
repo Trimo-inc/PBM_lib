@@ -5,6 +5,15 @@
 #include "../pbm_types.h"
 
 /**
+ * @brief Просто копирует массив чисел по размеру.
+ * @param[in] _digits Массив чисел.
+ * @param[in] _size   Размер массива `_digits`. ${NotNull} 
+ * @warning `_size` должен быть точным и не нулевым. 
+ */
+pbm_digit_t* _pbm_digit_copy(const pbm_digit_t* _digits, const size_t _size);
+
+
+/**
  * @brief Вытаскивает показатель степени из числа: 2^power = _num
  * @param[in] _num Число должно быть равно степени двойки, например, 8 или 16.
  * И не равно 0

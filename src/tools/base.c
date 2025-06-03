@@ -8,6 +8,14 @@
 #include <math.h>
 #endif
 
+pbm_digit_t *_pbm_digit_copy(const pbm_digit_t *_digits, const size_t _size)
+{
+    const size_t SIZE =  _size * sizeof(pbm_digit_t);
+    pbm_digit_t* __digits = (pbm_digit_t*)malloc(SIZE);
+    memcpy(__digits, _digits, SIZE);
+    return __digits;
+}
+
 uint16_t pbm___get2power(uint32_t _num)
 {
     uint16_t exponent = 0;
