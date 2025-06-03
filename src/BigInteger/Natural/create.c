@@ -9,6 +9,15 @@ pbm_Natural_ptr __pbm_natural_default_create(void)
     return big;
 }
 
+pbm_Natural_ptr __pbm_natural_size_create(const size_t _size)
+{
+    pbm_Natural_ptr big = (pbm_Natural_ptr)malloc(sizeof(struct pbm_Natural));
+    if (big) {
+        big->digits = (pbm_digit_t*)calloc(_size, sizeof(pbm_digit_t));
+        big->_size = _size;
+    }
+    return big;
+}
 
 pbm_Natural_ptr __pbm_natural_create(char *_num_str, const enum pbm_ns _number_system)
 {

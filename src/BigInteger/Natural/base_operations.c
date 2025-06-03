@@ -152,9 +152,7 @@ void _pbm_natural_bit_and__int(pbm_Natural_ptr _inatural, const pbm_digit_t _inu
 
 pbm_Natural_ptr _pbm_natural_bit_and(const pbm_Natural_ptr _inatural_1, const pbm_Natural_ptr _inatural_2)
 {
-    pbm_Natural_ptr _ret = __pbm_natural_default_create();
-    if(_ret == NULL)
-        return _ret;
+    pbm_Natural_ptr _ret = NULL;
     size_t min_p;
     {
         size_t max_p;
@@ -162,8 +160,7 @@ pbm_Natural_ptr _pbm_natural_bit_and(const pbm_Natural_ptr _inatural_1, const pb
             min_p = _inatural_1->_size;
             max_p = _inatural_2->_size;
         } else {min_p = _inatural_2->_size; max_p = _inatural_1->_size;}
-        _ret->digits = (pbm_digit_t*)calloc(max_p, sizeof(pbm_digit_t));
-        _ret->_size  = max_p;
+        _ret = __pbm_natural_size_create(max_p);
     }
     for (size_t i = 0; i < min_p; ++i) {
         _ret->digits[i] = _inatural_1->digits[i] & _inatural_2->digits[i];
