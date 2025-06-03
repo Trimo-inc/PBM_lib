@@ -3,7 +3,10 @@ cmake_minimum_required(VERSION 3.10)
 
 set(
     SOURCES
+    "print.c"
+    "./bit_op.c"
     "./test.c"
+    
 )
 
 include_directories("./")

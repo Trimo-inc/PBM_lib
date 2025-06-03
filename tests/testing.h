@@ -3,40 +3,47 @@
 
 #include <stdio.h>
 #include <assert.h>
-#ifdef __linux__
+
+#if defined(_POSIX_C_SOURCE) || defined(__linux__)
     #include <sys/time.h>
+    #define USE_GETTIMEOFDAY
 #else
     #include <time.h>
 #endif
 
+
+
 FILE* _log; // It'is logger output
 
-#define TEST(expr, ...) do {                                                    \
+/**
+ * @brief Создаёт тест (CreateTest)
+ * @param name   Имя теста
+ * @param brief  Короткое описание теста (Ставьте 0, если не хотите его писать)
+ * @param block_ Блок кода, который будет в данном тесте.
+ */
+#define CTEST(name, brief, block_) do {                                          \
+    fprintf(_log, "======START======\n");                                        \
+    fprintf(_log, "Name:  %s\n", name);                                          \
+    fprintf(_log, "Brief: %s\n", (brief == NULL) ? ("None") : brief);            \
+    block_;                                                                      \
+    fprintf(_log, "=======END=======\n\n");                                      \
+} while(0);
+
+
+#define TEST(expr, msg, ...) do {                                               \
 if (expr) {                                                                     \
-    fprintf(_log, "[+]:<%s> is expression \"%s\"\n", __func__, #expr);          \
+    fprintf(_log, "[+]:is expression \"%s\"\n", #expr);                         \
+    if (msg != 0)                                                               \
+        fprintf(_log, "\t%s\n", (char*)msg);                                    \
 }                                                                               \
 else {                                                                          \
-    fprintf(_log, "[-]:<%s> is expression \"%s\"\n", __func__, #expr);          \
+    fprintf(_log, "[-]:is expression \"%s\"\n", #expr);                         \
     fprintf(_log, __VA_ARGS__ );                                                \
     fprintf(_log, "\n");                                                        \
 }}                                                                              \
 while(0);
 
 
-#ifdef __linux__
-#define TIME_TEST(block_) do {                                                  \
-    struct timeval start, end;                                                  \
-    gettimeofday(&start, NULL);                                                 \
-    block_;                                                                     \
-    gettimeofday(&end, NULL);                                                   \
-    long seconds = end.tv_sec - start.tv_sec;                                   \
-    long micros = end.tv_usec - start.tv_usec;                                  \
-    fprintf(                                                                    \
-        _log,                                                                   \
-        "[PROGRAM]:<%s>\n%s\nTime spend: %ld.%08ld seconds\n",                  \
-        __func__, #block_, seconds, micros);                                    \
-} while(0); 
-#else
 #define TIME_TEST(block_) do {                                                  \
     clock_t start = clock();                                                    \
     block_;                                                                     \
@@ -47,7 +54,7 @@ while(0);
         __func__, #block_, time_spent);                                         \
 }                                                                               \
 while(0);
-#endif
+
 
 #define TIME_TEST_RANGE(block_, range) assert(range > 0); do {                  \
     clock_t total = 0;                                                          \
@@ -59,21 +66,14 @@ while(0);
     }                                                                           \
     double arv_time = (double)total / CLOCKS_PER_SEC / range;                   \
     fprintf(_log,                                                               \
-        "[PROGRAM]:<%s>\n%s\nAverage time for %d runs: %.8f seconds\n\n",       \
-        __func__, #block_, range, arv_time);                                    \
+        "[TIME_TEST_RANGE]:<%s:%d> Average time for %d runs: %.8f seconds\n\n", \
+        __func__, __LINE__, range, arv_time);                                   \
 }                                                                               \
 while(0);
 
 
+#include "pbm_lib.h"
+void __print_natural_pow(const pbm_Natural_ptr big);
+void bit_and(void);
 
-void __print_natural_pow(const pbm_Natural_ptr big) {
-    for (size_t i = 0; i < big->_size; ++i) {
-        #if ARCH == 32
-        fprintf(_log, "(%u)*((2^%u)^%u)+", big->digits[i], (unsigned int)PBM_digit_bits, (unsigned int)i);
-        #elif ARCH == 64
-        fprintf(_log, "(%llu)*((2^%llu)^%llu)+", big->digits[i], PBM_digit_bits, i);
-        #endif
-    }
-    fprintf(_log, "0\n");
-}
 #endif

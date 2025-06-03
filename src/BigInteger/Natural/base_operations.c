@@ -1,16 +1,17 @@
 #include "pbm_natural.h"
 #include "pbm_types.h"
+#include <stdlib.h>
 
 void _pbm_natural_normalization(pbm_Natural_ptr _inatural)
 {
-    struct pbm_Natural* _n;
     size_t s = _inatural->_size;
     while(s > 1 && _inatural->digits[s - 1] == 0) {
         --s;
     }
     if(s != _inatural->_size) {
-        _pbm_natural_custom_init(_n, _inatural->digits, s);
-        _pbm_natural_copy_init_s(_inatural, _n);
+        pbm_digit_t* digits = _pbm_digit_copy(_inatural->digits, s);
+        __pbm_natural_stack_delete(_inatural);
+        __pbm_natural_custom_init(_inatural, digits, s);
     }
 }
 
@@ -161,7 +162,8 @@ pbm_Natural_ptr _pbm_natural_bit_and(const pbm_Natural_ptr _inatural_1, const pb
             min_p = _inatural_1->_size;
             max_p = _inatural_2->_size;
         } else {min_p = _inatural_2->_size; max_p = _inatural_1->_size;}
-        _pbm_natural_custom_init(_ret, NULL, max_p);
+        _ret->digits = (pbm_digit_t*)calloc(max_p, sizeof(pbm_digit_t));
+        _ret->_size  = max_p;
     }
     for (size_t i = 0; i < min_p; ++i) {
         _ret->digits[i] = _inatural_1->digits[i] & _inatural_2->digits[i];
