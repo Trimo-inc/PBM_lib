@@ -14,5 +14,6 @@ int main(void)
 
 	bit_and();
 	bit_or();
+	bit_xor();
 	return 0;
 }

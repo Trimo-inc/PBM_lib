@@ -53,8 +53,6 @@ void bit_or(void) {
     {
         n1 = _pbm_natural_create(bstr_n1, 2);
         n2 = _pbm_natural_create(bstr_n2, 2);
-                                 "1111101001000101000000000000000000011010110000010000100010101010101000001100000";
-                                 "0000000000000001000000000000000111100001100001010010100000000000000000110010100";
         n3 = _pbm_natural_create("1111101001000101000000000000000111111011110001010010100010101010101000111110100", 2);
         n4 = _pbm_natural_bit_or(n1, n2);
         TEST(_pbm_natural_equal(n3, n4) == true, "The big numbers equal", "Not equal");
@@ -62,5 +60,26 @@ void bit_or(void) {
     });
 }
 
+
+void bit_xor(void) {
+    CTEST(__func__, "Small test",
+    {
+        n1 = _pbm_natural_create("101001000101", 2);
+        n2 = _pbm_natural_create("110001111100", 2);
+        n3 = _pbm_natural_create("011000111001", 2);
+        n4 = _pbm_natural_bit_xor(n1, n2);
+        TEST(_pbm_natural_equal(n3, n4) == true, 0, "Not equal");
+        DEL_ALL;
+    });
+    CTEST(__func__, "Big test",
+    {
+        n1 = _pbm_natural_create(bstr_n1, 2);
+        n2 = _pbm_natural_create(bstr_n2, 2);
+        n3 = _pbm_natural_create("1111101001000100000000000000000111111011010001000010000010101010101000111110100", 2);
+        n4 = _pbm_natural_bit_xor(n1, n2);
+        TEST(_pbm_natural_equal(n3, n4) == true, "The big numbers equal", "Not equal");
+        DEL_ALL;
+    });
+}
 #undef DEL
 #undef DEL_ALL

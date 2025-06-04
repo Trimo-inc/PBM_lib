@@ -206,5 +206,38 @@ pbm_Natural_ptr _pbm_natural_bit_or(const pbm_Natural_ptr _inatural_1, const pbm
     return _ret;
 }
 
+
+void _pbm_natural_bit_xor__int(pbm_Natural_ptr _inatural, const pbm_digit_t _inum)
+{
+    _inatural->digits[0] ^= _inum;
+}
+
+pbm_Natural_ptr _pbm_natural_bit_xor(const pbm_Natural_ptr _inatural_1, const pbm_Natural_ptr _inatural_2)
+{
+    size_t i = 0, max_size;
+    pbm_digit_t* digits;
+    if (_inatural_1->_size > _inatural_2->_size) {
+        max_size = _inatural_1->_size;
+        digits   = _inatural_1->digits;
+    } else {
+        max_size = _inatural_2->_size;
+        digits   = _inatural_2->digits;
+    }
+    pbm_Natural_ptr _ret    = __pbm_natural_size_create(max_size);
+    if (_ret) {
+        while (i < _inatural_1->_size && i < _inatural_2->_size) {
+            _ret->digits[i] = _inatural_1->digits[i] ^ _inatural_2->digits[i];
+            ++i;
+        }
+        while (i < max_size) {
+            _ret->digits[i] = digits[i];
+            ++i;
+        }
+
+        _pbm_natural_normalization(_ret);
+    
+    }
+    return _ret;
+}
 #undef MIN
 #undef MAX
