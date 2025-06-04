@@ -412,7 +412,7 @@ void _pbm_natural_bit_not(pbm_Natural_ptr _inatural);
 #endif
 
 /**
- * @brief т операцию `побитового И` между Нуль-Натуральным числом и простым числом.
+ * @brief Выполняет операцию `побитового И` между Нуль-Натуральным числом и простым числом.
  * @param[out] _inatural Нуль-Натуральное число, к которому применяется битовое И. ${Change}
  * @param[in]  _inum     Число, которое используется для побитового И.
  * \n
@@ -422,10 +422,29 @@ void _pbm_natural_bit_not(pbm_Natural_ptr _inatural);
 void _pbm_natural_bit_and__int(pbm_Natural_ptr _inatural, const pbm_digit_t _inum);
 
 /**
- * @brief т операцию `побитового И` между двумя Нуль-Натуральными числами.
+ * @brief Выполняет операцию `побитового И` между двумя Нуль-Натуральными числами.
  * @param[in] _inatural_1 Первое Нуль-Натуральное число
  * @param[in] _inatural_2 Второе Нуль-Натуральное число
  * @return ${Dynamic | Nullable} Результат, аналогичный между числами (result = _inatural_1 & _inatural_2)
  */
 pbm_Natural_ptr _pbm_natural_bit_and(const pbm_Natural_ptr _inatural_1, const pbm_Natural_ptr _inatural_2);
+
+
+/**
+ * @brief Выполняет операцию `побитового ИЛИ` между Нуль-Натуральным числом и простым числом.
+ * @param[out] _inatural Нуль-Натуральное число, к которому применяется битовое ИЛИ. ${Change}
+ * @param[in]  _inum     Число, которое используется для побитового ИЛИ.
+ * \n
+ * Вы можете использовать отрицательные числа, но они могут быть идентичны себе же.
+ * @return Ничего не возвращает. Результат операции является параметр `_inatural`
+ */
+void _pbm_natural_bit_or__int(pbm_Natural_ptr _inatural, const pbm_digit_t _inum);
+
+/**
+ * @brief Выполняет операцию `побитового ИЛИ` между двумя Нуль-Натуральными числами.
+ * @param[in] _inatural_1 Первое Нуль-Натуральное число
+ * @param[in] _inatural_2 Второе Нуль-Натуральное число
+ * @return ${Dynamic | Nullable} Результат, аналогичный между числами (result = _inatural_1 | _inatural_2)
+ */
+pbm_Natural_ptr _pbm_natural_bit_or(const pbm_Natural_ptr _inatural_1, const pbm_Natural_ptr _inatural_2);
 #endif

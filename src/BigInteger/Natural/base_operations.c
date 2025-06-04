@@ -142,13 +142,12 @@ void _pbm_natural_bit_not(pbm_Natural_ptr _inatural)
 
 void _pbm_natural_bit_and__int(pbm_Natural_ptr _inatural, const pbm_digit_t _inum)
 {
-    for (size_t i = 0; i < _inatural->_size; ++i) {
-        _inatural->digits[i] &= _inum;
-    }
+    _inatural->digits[0] &= _inum;
     _pbm_natural_normalization(_inatural);
 }
 
 #define MIN(_1, _2) ((_1 < _2) ? (_1) : (_2))
+#define MAX(_1, _2) ((_1 > _2) ? (_1) : (_2))
 
 pbm_Natural_ptr _pbm_natural_bit_and(const pbm_Natural_ptr _inatural_1, const pbm_Natural_ptr _inatural_2)
 {
@@ -162,12 +161,50 @@ pbm_Natural_ptr _pbm_natural_bit_and(const pbm_Natural_ptr _inatural_1, const pb
         } else {min_p = _inatural_2->_size; max_p = _inatural_1->_size;}
         _ret = __pbm_natural_size_create(max_p);
     }
-    for (size_t i = 0; i < min_p; ++i) {
-        _ret->digits[i] = _inatural_1->digits[i] & _inatural_2->digits[i];
-    }
+    if (_ret) {
+        for (size_t i = 0; i < min_p; ++i) {
+            _ret->digits[i] = _inatural_1->digits[i] & _inatural_2->digits[i];
+        }
 
-    _pbm_natural_normalization(_ret);
+        _pbm_natural_normalization(_ret);
+    }
+    return _ret;
+}
+
+
+void _pbm_natural_bit_or__int(pbm_Natural_ptr _inatural, const pbm_digit_t _inum)
+{
+    _inatural->digits[0] |= _inum;
+    _pbm_natural_normalization(_inatural);
+}
+
+pbm_Natural_ptr _pbm_natural_bit_or(const pbm_Natural_ptr _inatural_1, const pbm_Natural_ptr _inatural_2)
+{
+    size_t i = 0, max_size;
+    pbm_digit_t* digits;
+    if (_inatural_1->_size > _inatural_2->_size) {
+        max_size = _inatural_1->_size;
+        digits   = _inatural_1->digits;
+    } else {
+        max_size = _inatural_2->_size;
+        digits   = _inatural_2->digits;
+    }
+    pbm_Natural_ptr _ret    = __pbm_natural_size_create(max_size);
+    if (_ret) {
+        while (i < _inatural_1->_size && i < _inatural_2->_size) {
+            _ret->digits[i] = _inatural_1->digits[i] | _inatural_2->digits[i];
+            ++i;
+        }
+        while (i < max_size) {
+            _ret->digits[i] = digits[i];
+            ++i;
+        }
+
+        _pbm_natural_normalization(_ret);
+    
+    }
     return _ret;
 }
 
 #undef MIN
+#undef MAX

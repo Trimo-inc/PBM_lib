@@ -75,5 +75,9 @@ while(0);
 #include "pbm_lib.h"
 void __print_natural_pow(const pbm_Natural_ptr big);
 void bit_and(void);
+void bit_or(void);
+void bit_xor(void);
+void bit_lshift(void);
+void bit_rshift(void);
 
 #endif

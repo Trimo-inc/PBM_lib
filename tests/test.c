@@ -13,5 +13,6 @@ int main(void)
 	_log = stdout;
 
 	bit_and();
+	bit_or();
 	return 0;
 }
