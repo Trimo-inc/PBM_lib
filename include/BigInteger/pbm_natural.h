@@ -502,4 +502,12 @@ void _pbm_natural_bit_logic_rshift__int(pbm_Natural_ptr _inatural, const pbm_dig
  * @return Ничего не возвращает. Результат сложения является параметр `_inatural`
  */
 void _pbm_natural_add__int(pbm_Natural_ptr _inatural, const pbm_digit_t _inum);
+
+/**
+ * @brief Выполняет операцию сложения двух Нуль-Натуральных чисел.
+ * @param[in] _inatural_1 Первое слагаемое
+ * @param[in] _inatural_2 Второе слагаемое
+ * @return ${Dynamic | Nullable} Сложение `_inatural_1` и ` _inatural_2`
+ */
+pbm_Natural_ptr _pbm_natural_add(const pbm_Natural_ptr _inatural_1, const pbm_Natural_ptr _inatural_2);
 #endif

@@ -317,3 +317,32 @@ void _pbm_natural_add__int(pbm_Natural_ptr _inatural, const pbm_digit_t _inum)
         }
     }
 }
+
+pbm_Natural_ptr _pbm_natural_add(const pbm_Natural_ptr _inatural_1, const pbm_Natural_ptr _inatural_2)
+{
+    const size_t max_size = (_inatural_1->_size > _inatural_2->_size) ? _inatural_1->_size : _inatural_2->_size;
+    const size_t min_size = (_inatural_1->_size < _inatural_2->_size) ? _inatural_1->_size : _inatural_2->_size;
+
+    pbm_Natural_ptr _ret = __pbm_natural_size_create(max_size + 1); // Для запаса
+    if (_ret) {
+        pbm_digit_t carry = 0;
+        {
+            pbm_digit_t sum;
+            for (size_t i = 0; i < min_size; ++i) {
+                sum   = _inatural_1->digits[i] + _inatural_2->digits[i] + carry;
+                carry = (sum < _inatural_1->_size || sum < _inatural_2->_size);
+                _ret->digits[i] = sum;
+            }
+            {
+                pbm_digit_t* larger = ((_inatural_1->_size > _inatural_2->_size) ? (_inatural_1->digits) : (_inatural_2->digits));
+                for (size_t i = min_size; i < max_size; ++i) {
+                    sum   = larger[i] + carry;
+                    carry = (sum < larger[i]);
+                    _ret->digits[i] = sum;
+                }
+            }
+        }
+        _pbm_natural_normalization(_ret);
+    }
+    return _ret;
+}
