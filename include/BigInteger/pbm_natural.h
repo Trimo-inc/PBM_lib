@@ -87,7 +87,7 @@ void _pbm_natural_custom_init (pbm_Natural_ptr _inatural, const pbm_digit_t* _di
  * \n
  * Внутри использует `__pbm_natural_custom_init` 
  * @param[out] _inatural Нуль-Натуральное число ${Dynamic}
- * @param[in]  _digits Числа по основанию `PBM_ibase`. Они лишь присваиваются. 
+ * @param[in]  _digits Числа по основанию `PBM_ibase`. Они лишь присваиваются. ${Dynamic}
  * @param[in] __size  Размер `_digits`
  */
 void __pbm_natural_custom_init_s(pbm_Natural_ptr _inatural, pbm_digit_t* const _digits, const size_t __size);
@@ -477,4 +477,14 @@ pbm_Natural_ptr _pbm_natural_bit_xor(const pbm_Natural_ptr _inatural_1, const pb
  * @return Ничего не возвращает. Результат операции является параметр `_inatural`
  */
 void _pbm_natural_bit_logic_lshift__int(pbm_Natural_ptr _inatural, const pbm_digit_t shift_bits);
+
+/**
+ * @brief Выполняет операцию `логического побитого правого сдвига` на `shift_bits`.
+ * Операция `_inatural >> shift_bits`.
+ * \n Например, число "1000'0000" >> "1" == "0100'0000"
+ * @param[out] _inatural  Нуль-Натуральное число, биты которого логически сдвигаются вправо. ${Change}
+ * @param[in]  shift_bits Количетсво битов, на которое будет сдвинут `_inatural`
+ * @return Ничего не возвращает. Результат операции является параметр `_inatural`
+ */
+void _pbm_natural_bit_logic_rshift__int(pbm_Natural_ptr _inatural, const pbm_digit_t shift_bits);
 #endif

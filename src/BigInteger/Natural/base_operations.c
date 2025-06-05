@@ -18,7 +18,7 @@ void _pbm_natural_normalization(pbm_Natural_ptr _inatural)
 
 bool _pbm_natural__bool(const pbm_Natural_ptr _inatural)
 {
-    return (bool)*_inatural->digits;
+    return (bool)(_inatural->_size > 1 || (*_inatural->digits != (pbm_digit_t)0));
 }
 
 
@@ -199,8 +199,6 @@ pbm_Natural_ptr _pbm_natural_bit_or(const pbm_Natural_ptr _inatural_1, const pbm
             _ret->digits[i] = digits[i];
             ++i;
         }
-
-        _pbm_natural_normalization(_ret);
     
     }
     return _ret;
@@ -255,19 +253,47 @@ void _pbm_natural_bit_logic_lshift__int(pbm_Natural_ptr _inatural, const pbm_dig
     }
 
     pbm_digit_t* const digits = (pbm_digit_t*)calloc(__size, sizeof(pbm_digit_t));
-    pbm_digit_t carry = 0;
-    for (size_t i = 0; i < _inatural->_size; ++i) {
-        if (shift_in_digit > 0) {
-            digits[full_digits + i] = (pbm_digit_t)((_inatural->digits[i] << shift_in_digit) | carry);
-            carry = _inatural->digits[i] >> (PBM_digit_bits - shift_in_digit);
-        } else digits[full_digits + i] = _inatural->digits[i];
-    }
+    if (digits) {
+        pbm_digit_t carry = 0;
+        for (size_t i = 0; i < _inatural->_size; ++i) {
+            if (shift_in_digit > 0) {
+                digits[full_digits + i] = (pbm_digit_t)((_inatural->digits[i] << shift_in_digit) | carry);
+                carry = _inatural->digits[i] >> (PBM_digit_bits - shift_in_digit);
+            } else digits[full_digits + i] = _inatural->digits[i];
+        }
 
-    if (shift_in_digit > 0 && carry != 0) {
-        digits[full_digits + _inatural->_size] = carry;
+        if (shift_in_digit > 0 && carry != 0) {
+            digits[full_digits + _inatural->_size] = carry;
+        }
+        __pbm_natural_custom_init_s(_inatural, digits, __size);
+        
     }
-    __pbm_natural_custom_init_s(_inatural, digits, __size);
-    _pbm_natural_normalization(_inatural);
+}
+
+
+void _pbm_natural_bit_logic_rshift__int(pbm_Natural_ptr _inatural, const pbm_digit_t shift_bits)
+{
+    if (shift_bits == 0) return;
+
+    const pbm_digit_t full_digits    = shift_bits / PBM_digit_bits;
+    if (full_digits >= _inatural->_size) {
+        __pbm_natural_custom_init_s(_inatural, (pbm_digit_t*)calloc(1, sizeof(pbm_digit_t)), 1);
+    }
+    const pbm_digit_t shift_in_digit = shift_bits % PBM_digit_bits;
+
+    const size_t __size = _inatural->_size - full_digits;
+    pbm_digit_t* const digits = (pbm_digit_t*)calloc(__size, sizeof(pbm_digit_t));
+    if (digits) {
+        pbm_digit_t carry = 0;
+        for (size_t i = _inatural->_size - 1; i >= full_digits && i != (size_t)-1; --i) {
+            if (shift_in_digit > 0) {
+                digits[i - full_digits] = (pbm_digit_t)((_inatural->digits[i] >> shift_in_digit) | carry);
+                carry = _inatural->digits[i] << (PBM_digit_bits - shift_in_digit);
+            } else digits[i - full_digits] = _inatural->digits[i]; 
+        }
+        __pbm_natural_custom_init_s(_inatural, digits, __size);
+        _pbm_natural_normalization(_inatural);
+    }
 }
 #undef MIN
 #undef MAX

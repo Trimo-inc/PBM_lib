@@ -16,5 +16,6 @@ int main(void)
 	bit_or();
 	bit_xor();
 	bit_lshift();
+	bit_rshift();
 	return 0;
 }
