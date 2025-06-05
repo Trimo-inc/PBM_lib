@@ -81,5 +81,30 @@ void bit_xor(void) {
         DEL_ALL;
     });
 }
+
+
+void bit_lshift(void) {
+    CTEST("logic_lshift", "Natural for small test", {
+        n1 = __pbm_natural_create("000000000000001", 2);
+        _pbm_natural_bit_logic_lshift__int(n1, 1);
+        n2 = __pbm_natural_create("000000000000010", 2);
+        TEST(_pbm_natural_equal(n1, n2) == true, "Great!", "Not equal from %s", __func__);
+        _pbm_natural_bit_logic_lshift__int(n1, 1);
+        n3 = __pbm_natural_create("000000000000100", 2);
+        TEST(_pbm_natural_equal(n1, n3) == true, "Great!", "Not equal from %s", __func__);
+        _pbm_natural_bit_logic_lshift__int(n1, 10);
+        n4 = __pbm_natural_create("001000000000000", 2);
+        TEST(_pbm_natural_equal(n1, n4) == true, 0, "Not equal from %s", __func__);
+        DEL_ALL;
+    });
+    CTEST("logic_lshift", "Natural for big number test", {
+        n1 = __pbm_natural_create("100000000010100100100010000100001111100000000000001100000000000001100010000000010000000000001100000111000000100000000000100000100100100000010000100101001000010101000101010101000001010000000010100", 2);
+        _pbm_natural_bit_logic_lshift__int(n1, 74);
+        n2 = __pbm_natural_create("10000000001010010010001000010000111110000000000000110000000000000110001000000001000000000000110000011100000010000000000010000010010010000001000010010100100001010100010101010100000101000000001010000000000000000000000000000000000000000000000000000000000000000000000000000", 2);
+        TEST(_pbm_natural_equal(n1, n2) == true, "Great!", "Not equal from %s", __func__);
+        DEL_ALL;
+    });
+
+}
 #undef DEL
 #undef DEL_ALL

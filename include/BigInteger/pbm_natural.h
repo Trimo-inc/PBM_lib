@@ -466,4 +466,15 @@ void _pbm_natural_bit_xor__int(pbm_Natural_ptr _inatural, const pbm_digit_t _inu
  * @return ${Dynamic | Nullable} Результат, аналогичный между числами (result = _inatural_1 ^ _inatural_2)
  */
 pbm_Natural_ptr _pbm_natural_bit_xor(const pbm_Natural_ptr _inatural_1, const pbm_Natural_ptr _inatural_2);
+
+
+/**
+ * @brief Выполняет операцию `логического побитого левого сдвига` на `shift_bits`.
+ * Операция `_inatural << shift_bits`.
+ * \n Например, число "1000'0000" << "1" == "1'0000'0000"
+ * @param[out] _inatural  Нуль-Натуральное число, биты которого логически сдвигаются влево. ${Change}
+ * @param[in]  shift_bits Количетсво битов, на которое будет сдвинут `_inatural`
+ * @return Ничего не возвращает. Результат операции является параметр `_inatural`
+ */
+void _pbm_natural_bit_logic_lshift__int(pbm_Natural_ptr _inatural, const pbm_digit_t shift_bits);
 #endif
