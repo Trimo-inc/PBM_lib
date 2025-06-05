@@ -79,5 +79,9 @@ void bit_or(void);
 void bit_xor(void);
 void bit_lshift(void);
 void bit_rshift(void);
+void small_add(void);
+void big_add(void);
+void small_mul(void);
+void big_mul(void);
 
 #endif

@@ -17,5 +17,6 @@ int main(void)
 	bit_xor();
 	bit_lshift();
 	bit_rshift();
+	small_add();
 	return 0;
 }

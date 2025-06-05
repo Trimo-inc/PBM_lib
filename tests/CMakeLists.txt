@@ -5,6 +5,7 @@ set(
     SOURCES
     "print.c"
     "./bit_op.c"
+    "./arith.c"
     "./test.c"
     
 )

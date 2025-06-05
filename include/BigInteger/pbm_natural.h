@@ -411,6 +411,8 @@ bool _pbm_natural_less_or_equal(const pbm_Natural_ptr _inatural_1, const pbm_Nat
 void _pbm_natural_bit_not(pbm_Natural_ptr _inatural);
 #endif
 
+// Побитовые операции
+
 /**
  * @brief Выполняет операцию `побитового И` между Нуль-Натуральным числом и простым числом.
  * @param[out] _inatural Нуль-Натуральное число, к которому применяется битовое И. ${Change}
@@ -487,4 +489,17 @@ void _pbm_natural_bit_logic_lshift__int(pbm_Natural_ptr _inatural, const pbm_dig
  * @return Ничего не возвращает. Результат операции является параметр `_inatural`
  */
 void _pbm_natural_bit_logic_rshift__int(pbm_Natural_ptr _inatural, const pbm_digit_t shift_bits);
+
+
+// Арифметические операции
+
+/**
+ * @brief Выполняет операцию сложения Нуль-Натурального числа и обычного числа.
+ * \n
+ * `_inatural = _inatural + _inum`
+ * @param[out] _inatural Нуль-Натуральное число, которое складывает себя и `_inum`. ${Change}
+ * @param[in]  _inum     Слагаемое
+ * @return Ничего не возвращает. Результат сложения является параметр `_inatural`
+ */
+void _pbm_natural_add__int(pbm_Natural_ptr _inatural, const pbm_digit_t _inum);
 #endif

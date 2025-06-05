@@ -295,5 +295,25 @@ void _pbm_natural_bit_logic_rshift__int(pbm_Natural_ptr _inatural, const pbm_dig
         _pbm_natural_normalization(_inatural);
     }
 }
-#undef MIN
-#undef MAX
+
+
+void _pbm_natural_add__int(pbm_Natural_ptr _inatural, const pbm_digit_t _inum)
+{
+    pbm_digit_t carry = (_inum);
+    size_t i = 0;
+    while (carry && i < _inatural->_size) {
+        pbm_digit_t sum = _inatural->digits[i] + carry;
+        carry = (sum < _inatural->digits[i]);
+        _inatural->digits[i] = sum;
+        ++i;
+    }
+
+    if (carry) {
+        i = _inatural->_size + 1; // Оптимизация: size_t __size = _inatural->_size + 1;
+        pbm_digit_t* digits = (pbm_digit_t*)_pbm_digit_copy(_inatural->digits, i);
+        if (digits) {
+            digits[_inatural->_size] = carry;
+            __pbm_natural_custom_init_s(_inatural, digits, i);
+        }
+    }
+}
