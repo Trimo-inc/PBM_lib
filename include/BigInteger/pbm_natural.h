@@ -510,4 +510,23 @@ void _pbm_natural_add__int(pbm_Natural_ptr _inatural, const pbm_digit_t _inum);
  * @return ${Dynamic | Nullable} Сложение `_inatural_1` и ` _inatural_2`
  */
 pbm_Natural_ptr _pbm_natural_add(const pbm_Natural_ptr _inatural_1, const pbm_Natural_ptr _inatural_2);
+
+
+/**
+ * @brief Выполняет операцию умножения Нуль-Натурального числа и обычного числа.
+ * \n
+ * `_inatural = _inatural * _inum`
+ * @param[out] _inatural Нуль-Натуральное число, которое умножает себя и `_inum`. ${Change}
+ * @param[in]  _inum     Число множитель
+ * @return Ничего не возвращает. Результат произведения является параметр `_inatural`
+ */
+void _pbm_natural_mul__int(pbm_Natural_ptr _inatural, const pbm_digit_t _inum);
+
+/**
+ * @brief Выполняет операцию умножения двух Нуль-Натуральных чисел.
+ * @param[in] _inatural_1 Первый множитель 
+ * @param[in] _inatural_2 Второй множитель
+ * @return ${Dynamic | Nullable} Произведение `_inatural_1` и ` _inatural_2`
+ */
+pbm_Natural_ptr _pbm_natural_mul(const pbm_Natural_ptr _inatural_1, const pbm_Natural_ptr _inatural_2);
 #endif

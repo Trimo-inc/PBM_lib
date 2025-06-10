@@ -66,6 +66,37 @@ void small_add(void) {
     }   
 }
 
+void small_mul(void) {
+    CTEST(__func__, "for INT", {
+        n1 = __pbm_natural_create("100", 10);
+        n2 = __pbm_natural_create("200", 10);
+        _pbm_natural_mul__int(n1, 2);
+        TEST(_pbm_natural_equal(n1, n2), "100 * 2 = 200", "NO!");
+        _pbm_natural_mul__int(n1, 7);
+        n3 = __pbm_natural_create("1400", 10);
+        TEST(_pbm_natural_equal(n1, n3), "200 * 7 = 1400", "NO!");
+        _pbm_natural_mul__int(n3, PBM_ibase);
+        if (ARCH == 32) {
+            n4 = __pbm_natural_create("6012954213000", 10);
+            TEST(_pbm_natural_equal(n3, n4), "1400 * (2^32 - 1) = 6012954213000", "NO!");
+        }
+        if (ARCH == 64) {
+            n4 = __pbm_natural_create("25825441703193372261000", 10);
+            TEST(_pbm_natural_equal(n3, n4), "1400 * (2^64 - 1) = 25825441703193372261000", "NO!");
+        }
+        DEL_ALL;
+        n1 = __pbm_natural_create("100000000000000000000000000", 10);
+        n2 = __pbm_natural_create("100000000000000000000000000000000000", 10);
+        _pbm_natural_mul__int(n1,                            1000000000);
+        TEST(_pbm_natural_equal(n1, n2), "Okey", "What??");
+        n3 = __pbm_natural_create("9999999999999999999999999999999999999999999", 10);
+        n4 = __pbm_natural_create("12345678899999999999999999999999999999999998765432110", 10);
+        _pbm_natural_mul__int(n3, 1234567890);
+        TEST(_pbm_natural_equal(n3, n4), "Okey", "What??");
+        DEL_ALL;
+    });
+}
+
 
 #undef DEL
 #undef DEL_ALL

@@ -346,3 +346,48 @@ pbm_Natural_ptr _pbm_natural_add(const pbm_Natural_ptr _inatural_1, const pbm_Na
     }
     return _ret;
 }
+
+
+void _pbm_natural_mul__int(pbm_Natural_ptr _inatural, const pbm_digit_t _inum)
+{
+    if (_inum == 1) return;
+    if (_inum == 0) {
+        __pbm_natural_custom_init_s(_inatural, (pbm_digit_t*)calloc(1, sizeof(pbm_digit_t)), 1);
+        return;
+    }
+    pbm_digit_t carry = 0;
+    {
+        for (size_t i = 0; i < _inatural->_size; ++i) {
+            // Не константы (для оптимизации памяти)
+            pbm_digit_t low_1  = _inatural->digits[i] & PBM_low_mask;
+            pbm_digit_t low_2  = _inum & PBM_low_mask;
+            // high_1 в дальнейшим выступает в роли low
+            pbm_digit_t high_1 = _inatural->digits[i] >> PBM_half_bits;
+            pbm_digit_t high_2 = _inum >> PBM_half_bits;
+            {
+                const pbm_digit_t p0 = low_1 * low_2;
+                const pbm_digit_t p1 = low_1 * high_2;
+                const pbm_digit_t p2 = high_1 * low_2;
+                const pbm_digit_t p3 = high_1 * high_2;
+                {
+                    low_1  = p1 + p2;
+                    low_2  = p3 + (low_1 >> PBM_half_bits) + ((low_1 < p1) ? ((pbm_digit_t)1 << PBM_half_bits) : 0);
+
+                    high_1 = p0 + (low_1 << PBM_half_bits);
+                    high_2 = low_2 + (high_1 < p0);
+                }
+                high_1 += carry;
+                carry  = high_2 + (high_1 < carry);
+                _inatural->digits[i] = high_1;
+            }
+        }
+    }
+    if (carry) {
+        size_t __size = _inatural->_size + 1;
+        pbm_digit_t* digits = (pbm_digit_t*)_pbm_digit_copy(_inatural->digits, __size);
+        if (digits) {
+            digits[_inatural->_size] = carry;
+            __pbm_natural_custom_init_s(_inatural, digits, __size);
+        }
+    }
+}

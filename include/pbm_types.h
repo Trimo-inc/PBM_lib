@@ -26,8 +26,8 @@ typedef uint32_t pbm_digit_t;
 #define PBM_digit_bits ((sizeof(pbm_digit_t) * 8))
 #endif
   
-
-
+#define PBM_half_bits (sizeof(pbm_digit_t) * 4)
+#define PBM_low_mask  (((pbm_digit_t)1 << PBM_half_bits) - 1)
 
 
 

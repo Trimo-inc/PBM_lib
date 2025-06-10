@@ -18,5 +18,6 @@ int main(void)
 	bit_lshift();
 	bit_rshift();
 	small_add();
+	small_mul();
 	return 0;
 }
