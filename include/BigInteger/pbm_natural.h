@@ -475,7 +475,7 @@ pbm_Natural_ptr _pbm_natural_bit_xor(const pbm_Natural_ptr _inatural_1, const pb
  * Операция `_inatural << shift_bits`.
  * \n Например, число "1000'0000" << "1" == "1'0000'0000"
  * @param[out] _inatural  Нуль-Натуральное число, биты которого логически сдвигаются влево. ${Change}
- * @param[in]  shift_bits Количетсво битов, на которое будет сдвинут `_inatural`
+ * @param[in]  shift_bits количество битов, на которое будет сдвинут `_inatural`
  * @return Ничего не возвращает. Результат операции является параметр `_inatural`
  */
 void _pbm_natural_bit_logic_lshift__int(pbm_Natural_ptr _inatural, const pbm_digit_t shift_bits);
@@ -485,7 +485,7 @@ void _pbm_natural_bit_logic_lshift__int(pbm_Natural_ptr _inatural, const pbm_dig
  * Операция `_inatural >> shift_bits`.
  * \n Например, число "1000'0000" >> "1" == "0100'0000"
  * @param[out] _inatural  Нуль-Натуральное число, биты которого логически сдвигаются вправо. ${Change}
- * @param[in]  shift_bits Количетсво битов, на которое будет сдвинут `_inatural`
+ * @param[in]  shift_bits количество битов, на которое будет сдвинут `_inatural`
  * @return Ничего не возвращает. Результат операции является параметр `_inatural`
  */
 void _pbm_natural_bit_logic_rshift__int(pbm_Natural_ptr _inatural, const pbm_digit_t shift_bits);
@@ -512,6 +512,8 @@ void _pbm_natural_add__int(pbm_Natural_ptr _inatural, const pbm_digit_t _inum);
 pbm_Natural_ptr _pbm_natural_add(const pbm_Natural_ptr _inatural_1, const pbm_Natural_ptr _inatural_2);
 
 
+// Операторы умножения
+
 /**
  * @brief Выполняет операцию умножения Нуль-Натурального числа и обычного числа.
  * \n
@@ -529,4 +531,13 @@ void _pbm_natural_mul__int(pbm_Natural_ptr _inatural, const pbm_digit_t _inum);
  * @return ${Dynamic | Nullable} Произведение `_inatural_1` и ` _inatural_2`
  */
 pbm_Natural_ptr _pbm_natural_mul(const pbm_Natural_ptr _inatural_1, const pbm_Natural_ptr _inatural_2);
+
+/**
+ * @brief Выполняет операцию умножения двух Нуль-Натуральных чисел алгоритмом столбика.
+ * Подходит для чисел размером меньше 100
+ * @param[in] _inatural_1 Первый множитель 
+ * @param[in] _inatural_2 Второй множитель
+ * @return ${Dynamic | Nullable} Произведение `_inatural_1` и ` _inatural_2`
+ */
+pbm_Natural_ptr __pbm_natural_base_mul(const pbm_Natural_ptr _inatural_1, const pbm_Natural_ptr _inatural_2);
 #endif

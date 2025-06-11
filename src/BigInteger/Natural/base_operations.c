@@ -391,3 +391,33 @@ void _pbm_natural_mul__int(pbm_Natural_ptr _inatural, const pbm_digit_t _inum)
         }
     }
 }
+
+pbm_Natural_ptr __pbm_natural_base_mul(const pbm_Natural_ptr _inatural_1, const pbm_Natural_ptr _inatural_2)
+{
+    size_t __size = _inatural_1->_size + _inatural_2->_size;
+    pbm_Natural_ptr _ret = __pbm_natural_size_create(__size);
+    if (_ret) {
+        pbm_digit_t carry;
+        size_t k;
+        for (size_t i = 0; i < _inatural_1->_size; ++i) {
+            carry = 0;
+            pbm_digit_t prod, sum;
+            for (size_t j = 0; j < _inatural_2->_size; ++j) {
+                k = i + j;
+                prod = _inatural_1->digits[i] * _inatural_2->digits[j];
+                sum = _ret->digits[k] + prod + carry;
+                _ret->digits[k] = sum;
+                carry = ((sum < prod) || sum < _ret->digits[k]);
+            }
+            k = i + _inatural_2->_size;
+            while (carry && k < _ret->_size) {
+                sum = _ret->digits[k] + carry;
+                _ret->digits[k] = sum;
+                carry = (sum < carry);
+                ++k;
+            }
+        }
+        _pbm_natural_normalization(_ret);
+    }
+    return _ret;
+}

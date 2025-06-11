@@ -95,6 +95,21 @@ void small_mul(void) {
         TEST(_pbm_natural_equal(n3, n4), "Okey", "What??");
         DEL_ALL;
     });
+
+    CTEST(__func__, "for two ini", {
+        n1 = __pbm_natural_create("100000234", 10);
+        n2 = __pbm_natural_create("25", 10);
+        n3 = __pbm_natural_create("2500005850", 10);
+        n4 = __pbm_natural_base_mul(n1 , n2);
+        TEST(_pbm_natural_equal(n3, n4), "Yes!", "No!");
+        DEL_ALL;
+        n1 = __pbm_natural_size_create(1);
+        n2 = __pbm_natural_create("981643127418", 10);
+        n3 = __pbm_natural_base_mul(n1, n2);
+        TEST(_pbm_natural_equal(n1, n3), "Yes!", "No!");
+        n4 = NULL;
+        DEL_ALL;
+    });
 }
 
 
